@@ -1,5 +1,6 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1vw;
 }
 
 a, .btn-link {
@@ -46,3 +47,19 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+/* block of numbers */
+.hljs-ln-n {
+    user-select: none;
+    text-align: center;
+    color: #666;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 0.5em;
+    margin-right: 0.5em;
+}
+
+/* toast z-index */
+.blazored-toast-container {
+    z-index: 9999; /* higher than others */
+}

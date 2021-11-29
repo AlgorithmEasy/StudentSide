@@ -10,6 +10,15 @@
         "css/bootstrap.css*",
         "js/bootstrap.bundle.*"
       ]
+    },
+    {
+      "library": "font-awesome@5.15.4",
+      "destination": "wwwroot/lib/font-awesome/",
+      "files": [
+        "css/all.min.css",
+        "css/all.css",
+        "webfonts/*"
+      ]
     }
   ]
 }

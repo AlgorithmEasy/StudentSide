@@ -1,0 +1,82 @@
+﻿index-container {
+    width: 30%;
+    min-width: 250px;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    flex-wrap: nowrap;
+}
+
+.title {
+    font-size: 3.5em;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    margin: 0 0 2em;
+}
+
+a {
+    color: white;
+    text-decoration: unset;
+}
+
+::deep .login-form {
+    height: 3.5rem;
+    border-radius: 2.25rem;
+    border: 0;
+    font-size: 1.25rem;
+    background-color: lightgray;
+}
+
+::deep input.login-form {
+    opacity: 0.9;
+    padding: 0 15%;
+}
+
+::deep .login-form-button {
+    width: 100%;
+}
+
+::deep div.login-form-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+::deep .space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+::deep .white-bg {
+    background-color: white;
+}
+
+::deep .blue-bg {
+    background-color: #35A8FF;
+}
+
+::deep .gray-text {
+    color: gray;
+}
+
+::deep .login-form-group {
+    position: relative;
+    margin-top: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+::deep .login-form-group > .validation-message {
+    position: absolute;
+    margin-left: 8%;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

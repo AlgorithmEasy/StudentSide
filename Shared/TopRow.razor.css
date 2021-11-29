@@ -1,0 +1,20 @@
+﻿top-row-container {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+    top-row-container > * {
+        display: flex;
+        align-items: center;
+    }
+
+        top-row-container > * > * {
+            height: 60%;
+            margin: 0 0.5rem
+        }
+
+.fa {
+    cursor: pointer;
+}
+

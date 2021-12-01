@@ -1,0 +1,12 @@
+﻿    project-explorer-container > * {
+        width: 100%;
+    }
+
+top-row {
+    height: 3%;
+}
+
+.fas {
+    cursor: pointer;
+}
+

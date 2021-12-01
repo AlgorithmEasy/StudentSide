@@ -1,20 +1,4 @@
-﻿top-row-container {
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    font-size: x-large;
-}
-
-    top-row-container > * {
-        display: flex;
-        align-items: center;
-    }
-
-        top-row-container > * > * {
-            margin: 0 0.5rem
-        }
-
-.fa, .fas {
+﻿.fas {
     cursor: pointer;
 }
 

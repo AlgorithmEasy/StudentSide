@@ -1,0 +1,20 @@
+﻿@page "/Project"
+@using AlgorithmEasy.StudentSide.Pages.Project.Components
+
+<project-container class="d-flex vw-100 h-100">
+    <left class="h-100">
+        <ProjectExplorer></ProjectExplorer>
+    </left>
+    <right class="h-100 d-flex flex-column">
+        <div class="w-100 h-75 bg-black">
+            <Workspace></Workspace>
+        </div>
+        <div class="w-100 h-25 p-2">
+            <Terminal></Terminal>
+        </div>
+    </right>
+</project-container>
+
+@code {
+
+}

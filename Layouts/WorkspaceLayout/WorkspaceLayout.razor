@@ -9,10 +9,10 @@
         </left>
         <right class="h-100 d-flex flex-column">
             <div class="w-100 h-75 d-flex">
-                <div class="@(ShowCourse ? "w-50" : "w-100")">
+                <div class="@(ShowCourseViewer ? "w-50" : "w-100")">
                     <Workspace></Workspace>
                 </div>
-                @if (ShowCourse)
+                @if (ShowCourseViewer)
                 {
                     <CourseViewer></CourseViewer>
                 }
@@ -26,5 +26,5 @@
 
 @code
 {
-    public bool ShowCourse { get; set; } = true;
+    public bool ShowCourseViewer { get; set; } = true;
 }

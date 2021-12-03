@@ -17,7 +17,14 @@
                 </left>
                 <right class="d-flex align-items-center">
                     <div id="clock" class="mx-2 fa-lg"></div>
-                    <i class="fas fa-cog mx-2 fa-lg"></i>
+                    @if (Page == Page.Index)
+                    {
+                        <i class="fas fa-power-off mx-2 fa-lg"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-cog mx-2 fa-lg"></i>
+                    }
                 </right>
             </top-row-container>
         </top-row>

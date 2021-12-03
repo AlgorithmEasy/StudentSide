@@ -1,5 +1,4 @@
 ﻿@page "/"
-@layout IndexLayout
 @using System.ComponentModel.DataAnnotations
 @using AlgorithmEasy.Shared.Request
 
@@ -34,6 +33,9 @@
 
 @code
 {
+    [CascadingParameter]
+    public MainLayout Layout { get; init; }
+
     LoginInfo Info { get; set; }
 
     EditContext Context { get; set; }
@@ -42,6 +44,7 @@
 
     protected override Task OnInitializedAsync()
     {
+        Layout.Page = Page.Index;
         Info = new();
         Context = new(Info);
         return base.OnInitializedAsync();

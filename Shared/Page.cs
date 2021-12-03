@@ -2,6 +2,7 @@
 {
     public enum Page
     {
+        Index,
         Project,
         Course,
     }

@@ -21,3 +21,8 @@ main {
 top-row {
     height: 5vh;
 }
+
+.fas {
+    cursor: pointer;
+}
+

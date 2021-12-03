@@ -1,4 +1,4 @@
-﻿    project-explorer-container > * {
+﻿    project-container > * {
         width: 100%;
     }
 
@@ -9,4 +9,3 @@ top-row {
 .fas {
     cursor: pointer;
 }
-

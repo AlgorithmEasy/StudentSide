@@ -1,4 +1,8 @@
-﻿<project-explorer-container class="w-100 h-100 d-flex flex-column">
+﻿@page "/Project"
+@using AlgorithmEasy.StudentSide.Layouts.WorkspaceLayout
+@layout WorkspaceLayout
+
+<project-container class="w-100 h-100 d-flex flex-column">
     <top-row class="d-flex justify-content-end align-items-center px-3">
         <i class="fas fa-save mx-1 fa-lg"></i>
         <i class="fas fa-plus mx-1 fa-lg"></i>
@@ -12,7 +16,7 @@
             <li class="list-group-item">狗才写后端</li>
         </ul>
     </project-list>
-</project-explorer-container>
+</project-container>
 
 @code {
 

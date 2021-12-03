@@ -26,5 +26,17 @@
 
 @code
 {
+    [CascadingParameter]
+    public MainLayout Layout { get; set; }
+
     public bool ShowCourseViewer { get; set; } = true;
+
+    public Page Page
+    {
+        set
+        {
+            Layout.Page = value;
+            InvokeAsync(StateHasChanged);
+        }
+    }
 }

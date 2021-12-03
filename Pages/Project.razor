@@ -19,12 +19,14 @@
 </project-container>
 
 @code {
+
     [CascadingParameter]
-    public WorkspaceLayout Layout { get; set; }
+    public WorkspaceLayout Layout { get; init; }
 
     protected override Task OnInitializedAsync()
     {
         Layout.ShowCourseViewer = false;
+        Layout.Page = Page.Project;
         return base.OnInitializedAsync();
     }
 

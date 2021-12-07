@@ -1,6 +1,5 @@
 ﻿@page "/"
 @using System.ComponentModel.DataAnnotations
-@using AlgorithmEasy.Shared.Requests
 
 <index-container>
     <div class="title">算法易</div>
@@ -52,10 +51,16 @@
 
     void LoginSubmit()
     {
-        var request = new LoginRequest
+        if (string.IsNullOrEmpty(Info.UserId) || string.IsNullOrEmpty(Info.Password))
         {
-            UserId = Info.UserId
-        };
+            _toastService.ShowError("用户名或密码不得为空", "登录失败");
+            return;
+        }
+
+        var password = (Info.UserId + Info.Password).GetSha256();
+        _authenticationService.Login(Info.UserId, password);
+
+        _navigation.NavigateTo("/project");
     }
 
     class LoginInfo

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using AlgorithmEasy.Shared.Models;
+using AlgorithmEasy.Shared.Responses;
 using AlgorithmEasy.Shared.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -9,19 +9,15 @@ namespace AlgorithmEasy.StudentSide.Services.Authentication
 {
     public class Backdoor : AuthenticationService
     {
-        public override async Task<User> Login(string userId, byte[] password)
+        public override async Task<LoginResponse> Login(string userId, byte[] password)
         {
             if (string.IsNullOrEmpty(userId) || password == null)
                 return null;
 
-            User = new User
+            User = new LoginResponse
             {
                 UserId = userId,
-                Role = new Role
-                {
-                    RoleName = "Student"
-                },
-                Nickname = "Backdoor"
+                Role = "Student"
             };
 
             var identity = GetClaimsIdentity("Login");

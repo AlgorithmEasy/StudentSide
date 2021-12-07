@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.Toast
+@inherits LayoutComponentBase
 
 <CascadingValue Value="@this">
     <div class="page">
@@ -34,6 +35,8 @@
         </main>
     </div>
 </CascadingValue>
+
+<BlazoredToasts/>
 
 @code
 {

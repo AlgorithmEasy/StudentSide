@@ -1,5 +1,6 @@
 using AlgorithmEasy.Shared.Services;
 using AlgorithmEasy.StudentSide.Services.Authentication;
+using Blazored.Toast;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,8 @@ namespace AlgorithmEasy.StudentSide
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddBlazoredToast();
 
             services.AddSingleton<AuthenticationService, Backdoor>();
             services.AddScoped<AuthenticationStateProvider>(p => p.GetService<AuthenticationService>());

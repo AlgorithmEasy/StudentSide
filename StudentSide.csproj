@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Blazored.Toast" Version="3.2.2" />
+  </ItemGroup>
+
 </Project>

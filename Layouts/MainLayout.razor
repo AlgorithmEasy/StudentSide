@@ -9,10 +9,12 @@
                     @switch (Page)
                     {
                         case Page.Project:
-                            <i class="fas fa-book-reader fa-lg"></i>
+                            <i class="fas fa-book-reader fa-lg"
+                               @onclick="@(() => _navigation.NavigateTo("/course"))"></i>
                             break;
                         case Page.Course:
-                            <i class="fas fa-laptop-code fa-lg"></i>
+                            <i class="fas fa-laptop-code fa-lg"
+                               @onclick="@(() => _navigation.NavigateTo("/project"))"></i>
                             break;
                     }
                 </left>

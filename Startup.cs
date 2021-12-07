@@ -1,4 +1,7 @@
+using AlgorithmEasy.Shared.Services;
+using AlgorithmEasy.StudentSide.Services.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +24,9 @@ namespace AlgorithmEasy.StudentSide
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            services.AddSingleton<AuthenticationService, Backdoor>();
+            services.AddScoped<AuthenticationStateProvider>(p => p.GetService<AuthenticationService>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

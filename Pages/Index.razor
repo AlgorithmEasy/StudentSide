@@ -1,5 +1,6 @@
 ﻿@page "/"
-@using System.ComponentModel.DataAnnotations
+@using AlgorithmEasy.Shared.Requests
+@using AlgorithmEasy.Shared.Statuses
 
 <index-container>
     <div class="title">算法易</div>
@@ -7,12 +8,12 @@
         <DataAnnotationsValidator/>
 
         <p class="login-form-group">
-            <InputText class="form-control login-form" placeholder="用户名" @bind-Value="Info.UserId"/>
-            <ValidationMessage For="() => Info.UserId"/>
+            <InputText class="form-control login-form" placeholder="用户名" @bind-Value="LoginForm.UserId"/>
+            <ValidationMessage For="() => LoginForm.UserId"/>
         </p>
         <p class="login-form-group">
-            <InputText class="form-control login-form" type="password" placeholder="密码" @bind-Value="Info.Password"/>
-            <ValidationMessage For="() => Info.Password"/>
+            <InputText class="form-control login-form" type="password" placeholder="密码" @bind-Value="LoginForm.Password"/>
+            <ValidationMessage For="() => LoginForm.Password"/>
         </p>
         <p class="login-form-group space-between">
             <span>
@@ -35,7 +36,7 @@
     [CascadingParameter]
     public MainLayout Layout { get; init; }
 
-    LoginInfo Info { get; set; }
+    LoginRequest LoginForm { get; set; }
 
     EditContext Context { get; set; }
 
@@ -44,31 +45,36 @@
     protected override Task OnInitializedAsync()
     {
         Layout.Page = Page.Index;
-        Info = new();
-        Context = new(Info);
+        LoginForm = new();
+        Context = new(LoginForm);
         return base.OnInitializedAsync();
     }
 
-    void LoginSubmit()
+    async void LoginSubmit()
     {
-        if (string.IsNullOrEmpty(Info.UserId) || string.IsNullOrEmpty(Info.Password))
+        if (string.IsNullOrEmpty(LoginForm.UserId) || string.IsNullOrEmpty(LoginForm.Password))
         {
-            _toastService.ShowError("用户名或密码不得为空", "登录失败");
+            _toastService.ShowError("用户名或密码不得为空。", "登录失败");
             return;
         }
 
-        var password = (Info.UserId + Info.Password).GetSha256();
-        _authenticationService.Login(Info.UserId, password);
+        var request = new LoginRequest
+        {
+            UserId = LoginForm.UserId,
+            Password = (LoginForm.UserId + LoginForm.Password).GetSha256String()
+        };
+
+        switch (await _authenticationService.Login(request))
+        {
+            case LoginStatus.ConnectServerFailed:
+                _toastService.ShowError("未能与远程服务器建立连接，请检查网络设置。", "登录失败");
+                return;
+            case LoginStatus.LoginFailed:
+                _toastService.ShowError("用户名或密码错误。", "登录失败");
+                return;
+        }
 
         _navigation.NavigateTo("/project");
-    }
-
-    class LoginInfo
-    {
-        [Required(ErrorMessage = "请输入用户名")]
-        public string UserId { get; set; }
-        [Required(ErrorMessage = "请输入密码")]
-        public string Password { get; set; }
     }
 }
 

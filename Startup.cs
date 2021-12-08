@@ -1,3 +1,4 @@
+using System;
 using AlgorithmEasy.Shared.Services;
 using AlgorithmEasy.StudentSide.Services.Authentication;
 using Blazored.Toast;
@@ -28,8 +29,10 @@ namespace AlgorithmEasy.StudentSide
 
             services.AddBlazoredToast();
 
-            services.AddSingleton<AuthenticationService, Backdoor>();
+            services.AddSingleton<AuthenticationService, ProductAuthentication>();
             services.AddScoped<AuthenticationStateProvider>(p => p.GetService<AuthenticationService>());
+
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

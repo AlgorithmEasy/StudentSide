@@ -1,21 +1,23 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using AlgorithmEasy.Shared.Requests;
 using AlgorithmEasy.Shared.Responses;
 using AlgorithmEasy.Shared.Services;
+using AlgorithmEasy.Shared.Statuses;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace AlgorithmEasy.StudentSide.Services.Authentication
 {
     public class Backdoor : AuthenticationService
     {
-        public override async Task<LoginResponse> Login(string userId, byte[] password)
+        public override Task<LoginStatus> Login(LoginRequest request)
         {
-            if (string.IsNullOrEmpty(userId) || password == null)
+            if (string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.Password))
                 return null;
 
             User = new LoginResponse
             {
-                UserId = userId,
+                UserId = request.UserId,
                 Role = "Student"
             };
 
@@ -23,7 +25,7 @@ namespace AlgorithmEasy.StudentSide.Services.Authentication
             var claims = new ClaimsPrincipal(identity);
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claims)));
-            return User;
+            return Task.FromResult(LoginStatus.Success);
         }
 
         public override void Logout()

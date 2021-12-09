@@ -1,4 +1,4 @@
-﻿namespace AlgorithmEasy.StudentSide.Shared
+﻿namespace AlgorithmEasy.StudentSide.Shared.Enums
 {
     public enum Page
     {

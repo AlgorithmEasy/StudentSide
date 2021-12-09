@@ -22,6 +22,10 @@ namespace AlgorithmEasy.StudentSide.Services.Authentication
             _client.BaseAddress = new Uri("https://localhost:6001");
         }
 
+        public override event EventHandler<LoginResponse> LoginEventHandler;
+
+        public override event EventHandler LogoutEventHandler;
+
         public override async Task<LoginStatus> Login(LoginRequest request)
         {
             if (string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.Password))
@@ -44,6 +48,8 @@ namespace AlgorithmEasy.StudentSide.Services.Authentication
             var identity = GetClaimsIdentity("Login");
             var claims = new ClaimsPrincipal(identity);
 
+            LoginEventHandler?.Invoke(this, User);
+
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claims)));
             return LoginStatus.Success;
         }
@@ -54,6 +60,9 @@ namespace AlgorithmEasy.StudentSide.Services.Authentication
 
             var identity = new ClaimsIdentity();
             var claims = new ClaimsPrincipal(identity);
+
+            LogoutEventHandler?.Invoke(this, EventArgs.Empty);
+
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claims)));
         }
     }

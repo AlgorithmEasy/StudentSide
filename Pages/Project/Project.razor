@@ -1,0 +1,105 @@
+@page "/Project"
+@using AlgorithmEasy.StudentSide.Layouts.WorkspaceLayout
+@using AlgorithmEasy.StudentSide.Services
+@using AlgorithmEasy.StudentSide.Shared.Enums
+@using AlgorithmEasy.StudentSide.Pages.Project.Components
+@layout WorkspaceLayout
+@inject ProjectManageService _projectManager
+@implements IDisposable
+
+<project-container class="w-100 h-100 d-flex flex-column">
+    <top-row class="d-flex justify-content-end align-items-center px-3">
+        <i class="fas fa-save mx-1 fa-lg"></i>
+        <i class="fas fa-plus mx-1 fa-lg" @onclick="@OpenCreateProjectDialog"></i>
+    </top-row>
+    <div class="px-3 fs-3">我的项目</div>
+    <project-list>
+        <ul class="list-group list-group-flush my-3">
+            @foreach (var project in _projectManager.Projects)
+            {
+                @if (project.ProjectName == _projectManager.CurrentProject?.ProjectName)
+                {
+                    <li class="list-group-item active">@project.ProjectName</li>
+                }
+                else
+                {
+                    <li class="list-group-item" @ondblclick="@(() => OpenProject(project))">@project.ProjectName</li>
+                }
+            }
+        </ul>
+    </project-list>
+</project-container>
+@switch (Type)
+{
+    case DialogType.Create:
+        <CreateProjectDialog CloseDialogCallback="@CloseDialog"></CreateProjectDialog>
+        break;
+    case DialogType.Rename:
+        <RenameProjectDialog OldProjectName="@OldProjectName" CloseDialogCallback="@CloseDialog"></RenameProjectDialog>
+        break;
+}
+
+@code {
+
+    [CascadingParameter]
+    public WorkspaceLayout Layout { get; init; }
+
+    DialogType Type { get; set; }
+
+    void OpenProject(AlgorithmEasy.Shared.Models.Project project)
+    {
+        _projectManager.LoadProject(project);
+    }
+
+#region ProjectManagerDelegate
+#nullable enable
+    void ProjectsChanged(object? _, IEnumerable<AlgorithmEasy.Shared.Models.Project> projects) => InvokeAsync(StateHasChanged);
+    void CurrentProjectChanged(object? _, AlgorithmEasy.Shared.Models.Project project) => InvokeAsync(StateHasChanged);
+#nullable disable
+#endregion
+
+#region DialogParamters
+    string OldProjectName { get; set; }
+
+    void OpenCreateProjectDialog()
+    {
+        Type = DialogType.Create;
+        InvokeAsync(StateHasChanged);
+    }
+    void OpenRenameProjectDialog(string oldProjectName)
+    {
+        OldProjectName = oldProjectName;
+        Type = DialogType.Rename;
+        InvokeAsync(StateHasChanged);
+    }
+    void CloseDialog()
+    {
+        Type = DialogType.None;
+        InvokeAsync(StateHasChanged);
+    }
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+    {
+        Layout.ShowCourseViewer = false;
+        Layout.Page = Page.Project;
+
+        _projectManager.OnProjectsSet += ProjectsChanged;
+        _projectManager.OnCurrentProjectChanged += CurrentProjectChanged;
+        await _projectManager.GetPersonalProjects();
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        _projectManager.OnProjectsSet -= ProjectsChanged;
+        _projectManager.OnCurrentProjectChanged -= CurrentProjectChanged;
+    }
+
+    enum DialogType
+    {
+        None,
+        Create,
+        Rename,
+    }
+}

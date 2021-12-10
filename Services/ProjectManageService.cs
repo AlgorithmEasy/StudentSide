@@ -92,15 +92,15 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public async Task<Tuple<ToastLevel, string>> CreateProject(string projectName)
         {
-            var request = new CreateProjectRequest
-            {
-                ProjectName = projectName
-            };
-
             string message;
             try
             {
-                using var response = await _client.PostAsJsonAsync("ProjectManage/CreateProject", request);
+                using var response = await _client.PostAsJsonAsync(
+                    "ProjectManage/CreateProject",
+                    new CreateProjectRequest
+                    {
+                        ProjectName = projectName
+                    });
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _authentication.Logout();
@@ -125,14 +125,11 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public async Task<Tuple<ToastLevel, string>> SaveProject()
         {
-            var request = new SaveProjectRequest
-            {
-                ProjectName = CurrentProject!.ProjectName,
-                Workspace = CurrentProject!.Workspace
-            };
             try
             {
-                using var response = await _client.PostAsJsonAsync("ProjectManage/SaveProject", request);
+                using var response = await _client.PutAsync(
+                    $"ProjectManage/SaveProject?projectName={CurrentProject!.ProjectName}",
+                    new StringContent(CurrentProject!.Workspace));
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _authentication.Logout();
@@ -156,14 +153,15 @@ namespace AlgorithmEasy.StudentSide.Services
         {
             if (oldProjectName == newProjectName)
                 return new(ToastLevel.Error, $"新项目名{newProjectName}与原项目名相同，请重新输入。");
-            var request = new RenameProjectRequest
-            {
-                OldProjectName = oldProjectName,
-                NewProjectName = newProjectName
-            };
             try
             {
-                using var response = await _client.PostAsJsonAsync("ProjectManage/RenameProject", request);
+                using var response = await _client.PutAsJsonAsync(
+                    "ProjectManage/RenameProject",
+                    new RenameProjectRequest
+                    {
+                        OldProjectName = oldProjectName,
+                        NewProjectName = newProjectName
+                    });
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _authentication.Logout();
@@ -188,13 +186,9 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public async Task<Tuple<ToastLevel, string>> DeleteProject(string projectName)
         {
-            var request = new DeleteProjectRequest
-            {
-                ProjectName = projectName,
-            };
             try
             {
-                using var response = await _client.PostAsJsonAsync("ProjectManage/DeleteProject", request);
+                using var response = await _client.DeleteAsync($"ProjectManage/DeleteProject?ProjectName={projectName}");
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _authentication.Logout();

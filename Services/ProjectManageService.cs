@@ -66,6 +66,18 @@ namespace AlgorithmEasy.StudentSide.Services
                 _client.DefaultRequestHeaders.Authorization = null;
         }
 
+        public void LoadProject(string projectName)
+        {
+            CurrentProject = Projects.SingleOrDefault(project => project.ProjectName == projectName);
+        }
+
+        public void LoadProject(Project project)
+        {
+            if (Projects.All(p => p.ProjectName != project.ProjectName))
+                return;
+            CurrentProject = project;
+        }
+
         public async Task<Tuple<ToastLevel, string>> GetPersonalProjects()
         {
             try
@@ -169,14 +181,10 @@ namespace AlgorithmEasy.StudentSide.Services
                 }
 
                 var message = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    if (CurrentProject != null && CurrentProject?.ProjectName == oldProjectName)
-                        CurrentProject.ProjectName = newProjectName;
-                    return new(ToastLevel.Success, message);
-                }
-
-                return new(ToastLevel.Error, message);
+                if (response.StatusCode != HttpStatusCode.OK) return new(ToastLevel.Error, message);
+                if (CurrentProject != null && CurrentProject?.ProjectName == oldProjectName)
+                    CurrentProject.ProjectName = newProjectName;
+                return new(ToastLevel.Success, message);
             }
             catch
             {
@@ -196,14 +204,10 @@ namespace AlgorithmEasy.StudentSide.Services
                 }
 
                 var message = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    if (CurrentProject?.ProjectName == projectName)
-                        CurrentProject = null;
-                    return new(ToastLevel.Success, message);
-                }
-
-                return new(ToastLevel.Error, message);
+                if (response.StatusCode != HttpStatusCode.OK) return new(ToastLevel.Error, message);
+                if (CurrentProject?.ProjectName == projectName)
+                    CurrentProject = null;
+                return new(ToastLevel.Success, message);
             }
             catch
             {

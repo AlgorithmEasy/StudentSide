@@ -49,12 +49,19 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public ProjectManageService(HttpClient client, AuthenticationService authentication)
         {
+            Projects = new List<Project>();
+
+            _authentication = authentication;
+
             _client = client;
             _client.BaseAddress = new Uri("https://localhost:7001");
 
-            _authentication = authentication;
-            _authentication.LoginEventHandler += (_, arg) =>
-                _client.DefaultRequestHeaders.Authorization = new("Bearer", arg.Token);
+            var jwt = authentication.GetAuthenticationStateAsync().Result.User?.FindFirst("Json Web Token")?.Value;
+            if (!string.IsNullOrEmpty(jwt))
+                _client.DefaultRequestHeaders.Authorization = new("Bearer", jwt);
+
+            _authentication.LoginEventHandler += (_, user) =>
+                _client.DefaultRequestHeaders.Authorization = new("Bearer", user.Token);
             _authentication.LogoutEventHandler += (_, _) =>
                 _client.DefaultRequestHeaders.Authorization = null;
         }

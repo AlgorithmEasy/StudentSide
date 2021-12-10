@@ -1,5 +1,6 @@
 using System;
 using AlgorithmEasy.Shared.Services;
+using AlgorithmEasy.StudentSide.Services;
 using AlgorithmEasy.StudentSide.Services.Authentication;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,8 @@ namespace AlgorithmEasy.StudentSide
 
             services.AddSingleton<AuthenticationService, ProductAuthentication>();
             services.AddScoped<AuthenticationStateProvider>(p => p.GetService<AuthenticationService>());
+
+            services.AddSingleton<ProjectManageService>();
 
             services.AddHttpClient();
         }

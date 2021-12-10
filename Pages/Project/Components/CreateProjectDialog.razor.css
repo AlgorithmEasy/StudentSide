@@ -1,0 +1,17 @@
+create-project-dialog {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    background-color: #000000CC;
+    z-index: 350;
+}
+
+dialog-body {
+    height: 80%;
+}
+
+.validation-message {
+    position: absolute;
+    margin-left: 8%;
+}

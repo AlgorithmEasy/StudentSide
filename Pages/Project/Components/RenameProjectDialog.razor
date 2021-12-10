@@ -1,0 +1,69 @@
+@using System.ComponentModel.DataAnnotations
+@using AlgorithmEasy.Shared.Requests
+@using AlgorithmEasy.StudentSide.Services
+@inject ProjectManageService _projectManager
+
+<rename-project-dialog class="d-flex flex-column align-items-center justify-content-center">
+    <EditForm class="bg-white w-25 p-2 d-flex flex-column" EditContext="Context" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator/>
+
+        <legend class="mb-3 px-3">项目更名</legend>
+
+        <form-body class="d-flex flex-column justify-content-between">
+            <div class="mb-3 px-3">
+                <label class="form-label">新项目名称</label>
+                <InputText class="form-control" placeholder="项目名称" @bind-Value="Form.ProjectName"/>
+                <ValidationMessage For="@(() => Form.ProjectName)"/>
+                <div class="form-text">原项目名称：@OldProjectName</div>
+            </div>
+
+            <div class="w-50 d-flex px-3">
+                <button class="btn btn-primary mx-2" type="submit">提 交</button>
+                <div type="button" class="btn btn-danger mx-2"
+                     @onclick="@(async () => await CloseDialogCallback.InvokeAsync())">关 闭</div>
+            </div>
+        </form-body>
+    </EditForm>
+</rename-project-dialog>
+
+@code {
+
+    [Required] [Parameter] public string OldProjectName { get; set; }
+    [Required] [Parameter] public EventCallback CloseDialogCallback { get; set; }
+
+    UpdateProjectForm Form { get; set; }
+    EditContext Context { get; set; }
+
+    async Task SubmitForm()
+    {
+        {
+            var (level, message) = await _projectManager.RenameProject(OldProjectName, Form.ProjectName);
+            _toastService.ShowToast(level, message);
+            if (level != ToastLevel.Success) return;
+        }
+        {
+            var(level, message) = await _projectManager.GetPersonalProjects();
+            if (level != ToastLevel.Success)
+            {
+                _toastService.ShowToast(level, message);
+                return;
+            }
+        }
+        await CloseDialogCallback.InvokeAsync();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        Form = new();
+        Context = new(Form);
+        return base.OnInitializedAsync();
+    }
+
+    class UpdateProjectForm
+    {
+        [Required(ErrorMessage = "项目名不得为空。")]
+        [MaxLength(30, ErrorMessage = "项目名称不得超过30字。")]
+        public string ProjectName { get; set; }
+    }
+
+}

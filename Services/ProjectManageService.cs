@@ -104,7 +104,6 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public async Task<Tuple<ToastLevel, string>> CreateProject(string projectName)
         {
-            string message;
             try
             {
                 using var response = await _client.PostAsJsonAsync(
@@ -118,21 +117,15 @@ namespace AlgorithmEasy.StudentSide.Services
                     _authentication.Logout();
                     return new(ToastLevel.Error, ErrorMessages.UnAuthorizedErrorMessage);
                 }
-                message = await response.Content.ReadAsStringAsync();
+                var message = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return new(ToastLevel.Error, message);
+                return new(ToastLevel.Success, message);
             }
             catch
             {
                 return new(ToastLevel.Error, ErrorMessages.ConnectErrorMessage);
             }
-
-            var ret = await GetPersonalProjects();
-            if (ret.Item1 != ToastLevel.Success)
-                return ret;
-
-            CurrentProject = Projects?.SingleOrDefault(project => project.ProjectName == projectName);
-            return new(ToastLevel.Success, message);
         }
 
         public async Task<Tuple<ToastLevel, string>> SaveProject()

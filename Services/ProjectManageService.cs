@@ -94,7 +94,7 @@ namespace AlgorithmEasy.StudentSide.Services
                 Projects = projects?.Projects ?? new List<Project>();
                 if (projects?.Projects == null)
                     return new(ToastLevel.Error, ErrorMessages.ResponseErrorMessage);
-                return null;
+                return new(ToastLevel.Success, string.Empty);
             }
             catch
             {

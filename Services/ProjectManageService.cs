@@ -154,6 +154,8 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public async Task<Tuple<ToastLevel, string>> RenameProject(string oldProjectName, string newProjectName)
         {
+            if (oldProjectName == newProjectName)
+                return new(ToastLevel.Error, $"新项目名{newProjectName}与原项目名相同，请重新输入。");
             var request = new RenameProjectRequest
             {
                 OldProjectName = oldProjectName,

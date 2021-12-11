@@ -34,6 +34,7 @@ namespace AlgorithmEasy.StudentSide
             services.AddScoped<AuthenticationStateProvider>(p => p.GetService<AuthenticationService>());
 
             services.AddSingleton<ProjectManageService>();
+            services.AddScoped<CourseManageService>();
 
             services.AddHttpClient();
         }

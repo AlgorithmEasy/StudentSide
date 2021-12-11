@@ -12,6 +12,8 @@ using AlgorithmEasy.Shared.Services;
 using AlgorithmEasy.StudentSide.Shared;
 using Blazored.Toast.Services;
 
+using ToastTuple = System.Tuple<Blazored.Toast.Services.ToastLevel, string>;
+
 namespace AlgorithmEasy.StudentSide.Services
 {
     public class ProjectManageService
@@ -19,7 +21,7 @@ namespace AlgorithmEasy.StudentSide.Services
         private readonly HttpClient _client;
         private readonly AuthenticationService _authentication;
 
-        private IEnumerable<Project> _projects;
+        private IEnumerable<Project> _projects = new List<Project>();
         public IEnumerable<Project> Projects
         {
             get => _projects;
@@ -49,8 +51,6 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public ProjectManageService(HttpClient client, AuthenticationService authentication)
         {
-            Projects = new List<Project>();
-
             _authentication = authentication;
 
             _client = client;
@@ -79,7 +79,7 @@ namespace AlgorithmEasy.StudentSide.Services
         }
 
         #region HttpClient
-        public async Task<Tuple<ToastLevel, string>> GetPersonalProjects()
+        public async Task<ToastTuple> GetPersonalProjects()
         {
             try
             {
@@ -103,7 +103,7 @@ namespace AlgorithmEasy.StudentSide.Services
             }
         }
 
-        public async Task<Tuple<ToastLevel, string>> CreateProject(string projectName)
+        public async Task<ToastTuple> CreateProject(string projectName)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace AlgorithmEasy.StudentSide.Services
             }
         }
 
-        public async Task<Tuple<ToastLevel, string>> SaveProject()
+        public async Task<ToastTuple> SaveProject()
         {
             try
             {
@@ -155,7 +155,7 @@ namespace AlgorithmEasy.StudentSide.Services
             }
         }
 
-        public async Task<Tuple<ToastLevel, string>> RenameProject(string oldProjectName, string newProjectName)
+        public async Task<ToastTuple> RenameProject(string oldProjectName, string newProjectName)
         {
             if (oldProjectName == newProjectName)
                 return new(ToastLevel.Error, $"新项目名{newProjectName}与原项目名相同，请重新输入。");
@@ -186,7 +186,7 @@ namespace AlgorithmEasy.StudentSide.Services
             }
         }
 
-        public async Task<Tuple<ToastLevel, string>> DeleteProject(string projectName)
+        public async Task<ToastTuple> DeleteProject(string projectName)
         {
             try
             {

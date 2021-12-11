@@ -19,6 +19,36 @@
         "css/all.css",
         "webfonts/*"
       ]
+    },
+    {
+      "library": "marked@4.0.2",
+      "destination": "wwwroot/lib/marked/"
+    },
+    {
+      "library": "dompurify@2.3.4",
+      "destination": "wwwroot/lib/dompurify/"
+    },
+    {
+      "library": "github-markdown-css@5.1.0",
+      "destination": "wwwroot/lib/github-markdown-css/"
+    },
+    {
+      "library": "mathjax@3.2.0",
+      "destination": "wwwroot/lib/mathjax/",
+      "files": [
+        "es5/tex-mml-chtml.js",
+        "es5/tex-mml-chtml.min.js",
+        "es5/output/chtml/fonts/woff-v2/*.woff"
+      ]
+    },
+    {
+      "library": "highlight.js@11.3.1",
+      "destination": "wwwroot/lib/highlight.js/",
+      "files": [
+        "highlight.min.js",
+        "styles/default.min.css",
+        "languages/python.min.js"
+      ]
     }
   ]
 }

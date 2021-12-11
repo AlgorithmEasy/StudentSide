@@ -78,6 +78,7 @@ namespace AlgorithmEasy.StudentSide.Services
             CurrentProject = project;
         }
 
+        #region HttpClient
         public async Task<Tuple<ToastLevel, string>> GetPersonalProjects()
         {
             try
@@ -207,5 +208,6 @@ namespace AlgorithmEasy.StudentSide.Services
                 return new(ToastLevel.Error, ErrorMessages.ConnectErrorMessage);
             }
         }
+        #endregion
     }
 }

@@ -49,7 +49,7 @@
 #region ProjectManagerDelegate
 #nullable enable
     void ProjectsChanged(object? _, IEnumerable<AlgorithmEasy.Shared.Models.Project> projects) => InvokeAsync(StateHasChanged);
-    void CurrentProjectChanged(object? _, AlgorithmEasy.Shared.Models.Project project) => InvokeAsync(StateHasChanged);
+    void CurrentProjectChanged(object? _, AlgorithmEasy.Shared.Models.Project? project) => InvokeAsync(StateHasChanged);
 #nullable disable
 #endregion
 

@@ -58,7 +58,10 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public event EventHandler<IEnumerable<Course>> OnCoursesSet;
         public event EventHandler<IEnumerable<LearningHistory>> OnLearningHistoriesSet;
-        public event EventHandler<Course> OnCurrentCourseChanged;
+
+#nullable enable
+        public event EventHandler<Course?>? OnCurrentCourseChanged;
+#nullable disable
 
         public CourseManageService(HttpClient client, AuthenticationService authentication)
         {

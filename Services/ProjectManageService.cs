@@ -47,7 +47,10 @@ namespace AlgorithmEasy.StudentSide.Services
 #nullable disable
 
         public event EventHandler<IEnumerable<Project>> OnProjectsSet;
-        public event EventHandler<Project> OnCurrentProjectChanged;
+
+#nullable enable
+        public event EventHandler<Project?>? OnCurrentProjectChanged;
+#nullable disable
 
         public ProjectManageService(HttpClient client, AuthenticationService authentication)
         {

@@ -73,9 +73,7 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public void LoadProject(Project project)
         {
-            if (Projects.All(p => p.ProjectName != project.ProjectName))
-                return;
-            CurrentProject = project;
+            LoadProject(project.ProjectName);
         }
 
         #region HttpClient

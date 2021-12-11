@@ -23,7 +23,7 @@
                 }
                 else
                 {
-                    <li class="list-group-item" @ondblclick="@(() => OpenProject(project))">@project.ProjectName</li>
+                    <li class="list-group-item" @ondblclick="@(() => _projectManager.LoadProject(project))">@project.ProjectName</li>
                 }
             }
         </ul>
@@ -45,11 +45,6 @@
     public WorkspaceLayout Layout { get; init; }
 
     DialogType Type { get; set; }
-
-    void OpenProject(AlgorithmEasy.Shared.Models.Project project)
-    {
-        _projectManager.LoadProject(project);
-    }
 
 #region ProjectManagerDelegate
 #nullable enable

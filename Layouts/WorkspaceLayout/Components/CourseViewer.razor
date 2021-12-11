@@ -1,5 +1,54 @@
-﻿<h3>CourseViewer</h3>
+﻿@using AlgorithmEasy.StudentSide.Services
+@using AlgorithmEasy.Shared.Models
+@implements IDisposable
+@inject IJSRuntime _jsRuntime
+@inject CourseManageService _courseManager
+
+<course-viewer-container class="w-100 h-100">
+    @((MarkupString) ContentHtml)
+</course-viewer-container>
 
 @code {
-    
+
+        const string NoContentMessage = "* 该课程暂时没有内容哦。";
+
+    string ContentHtml { get; set; }
+
+    #region CourseManagerDelegate
+#nullable enable
+    async void CurrentCourseChanged(object? _, Course? course)
+#nullable disable
+    {
+        if (course == null)
+        {
+            ContentHtml = string.Empty;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(course.CourseDetail.Content))
+            ContentHtml = await _jsRuntime.InvokeAsync<string>("Markdown.ToHtml", NoContentMessage, "/course");
+        else
+            ContentHtml = await _jsRuntime.InvokeAsync<string>("Markdown.ToHtml",
+                course.CourseDetail.Content, "/courses");
+
+        await InvokeAsync(StateHasChanged);
+
+        await _jsRuntime.InvokeVoidAsync("MathJax.startup.defaultReady");
+    }
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+    {
+        _courseManager.OnCurrentCourseChanged += CurrentCourseChanged;
+        CurrentCourseChanged(this, _courseManager.CurrentCourse);
+
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        _courseManager.OnCurrentCourseChanged -= CurrentCourseChanged;
+    }
+
 }

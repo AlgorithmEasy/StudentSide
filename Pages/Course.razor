@@ -1,17 +1,36 @@
 ﻿@page "/Course"
 @using AlgorithmEasy.StudentSide.Layouts.WorkspaceLayout
+@using AlgorithmEasy.StudentSide.Services
 @using AlgorithmEasy.StudentSide.Shared.Enums
 @layout WorkspaceLayout
+@implements IDisposable
+@inject CourseManageService _courseManager
 
 <course-container class="w-100 h-100 d-flex flex-column">
     <top-row></top-row>
     <div class="px-3 fs-3">我的课程</div>
     <course-list>
         <ul class="list-group list-group-flush my-3">
-            <li class="list-group-item active">BubbleSort</li>
-            <li class="list-group-item inactive">Fuck</li>
-            <li class="list-group-item inactive">前端入门</li>
-            <li class="list-group-item inactive">后端入门</li>
+            @foreach (var course in _courseManager.Courses)
+            {
+                var progress = _courseManager.LearningHistories
+                    .SingleOrDefault(h => h.CourseId == course.CourseId)?.Progress;
+                @if (course.CourseId == _courseManager.CurrentCourse?.CourseId)
+                {
+                    <li class="list-group-item active d-flex justify-content-between">
+                        <span>@course.CourseDetail.Title</span>
+                        <span>@(progress ?? 0)%</span>
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item d-flex justify-content-between"
+                        @ondblclick="@(() => _courseManager.LoadCourse(course))">
+                        <span>@course.CourseDetail.Title</span>
+                        <span>@(progress ?? 0)%</span>
+                    </li>
+                }
+            }
         </ul>
     </course-list>
 </course-container>
@@ -21,11 +40,46 @@
     [CascadingParameter]
     public WorkspaceLayout Layout { get; init; }
 
-    protected override Task OnInitializedAsync()
+    #region CourseManagerDelegate
+#nullable enable
+    void CoursesSet(object? _, IEnumerable<AlgorithmEasy.Shared.Models.Course> courses) =>
+        InvokeAsync(StateHasChanged);
+    void LearningHistoriesSet(object? _, IEnumerable<AlgorithmEasy.Shared.Models.LearningHistory> learningHistories) =>
+        InvokeAsync(StateHasChanged);
+#nullable disable
+    #endregion
+
+    protected override async Task OnInitializedAsync()
     {
-        Layout.ShowCourseViewer = false;
+        Layout.ShowCourseViewer = true;
         Layout.Page = Page.Course;
-        return base.OnInitializedAsync();
+
+        {
+            var tuple = await _courseManager.GetCourses();
+            if (tuple.Item1 != ToastLevel.Success)
+            {
+                _toastService.ShowToast(tuple.Item1, tuple.Item2);
+                return;
+            }
+        }
+        {
+            var tuple = await _courseManager.GetPersonalLearningHistories();
+            if (tuple.Item1 != ToastLevel.Success)
+            {
+                _toastService.ShowToast(tuple.Item1, tuple.Item2);
+                return;
+            }
+        }
+
+        _courseManager.OnCoursesSet += CoursesSet;
+        _courseManager.OnLearningHistoriesSet += LearningHistoriesSet;
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        _courseManager.OnCoursesSet -= CoursesSet;
+        _courseManager.OnLearningHistoriesSet -= LearningHistoriesSet;
     }
 
 }

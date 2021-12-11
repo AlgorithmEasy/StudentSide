@@ -86,7 +86,11 @@
 
         _projectManager.OnProjectsSet += ProjectsChanged;
         _projectManager.OnCurrentProjectChanged += CurrentProjectChanged;
-        await _projectManager.GetPersonalProjects();
+        {
+            var tuple = await _projectManager.GetPersonalProjects();
+            if (tuple.Item1 != ToastLevel.Success)
+                _toastService.ShowToast(tuple.Item1, tuple.Item2);
+        }
         await base.OnInitializedAsync();
     }
 

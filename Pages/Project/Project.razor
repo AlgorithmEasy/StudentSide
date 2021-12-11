@@ -5,6 +5,7 @@
 @using AlgorithmEasy.StudentSide.Pages.Project.Components
 @layout WorkspaceLayout
 @inject ProjectManageService _projectManager
+@inject IJSRuntime _jsRuntime
 @implements IDisposable
 
 <project-container class="w-100 h-100 d-flex flex-column">
@@ -23,7 +24,7 @@
                 }
                 else
                 {
-                    <li class="list-group-item" @ondblclick="@(() => _projectManager.LoadProject(project))">@project.ProjectName</li>
+                    <li class="list-group-item" @ondblclick="@(() => LoadProject(project))">@project.ProjectName</li>
                 }
             }
         </ul>
@@ -45,6 +46,12 @@
     public WorkspaceLayout Layout { get; init; }
 
     DialogType Type { get; set; }
+
+    async void LoadProject(AlgorithmEasy.Shared.Models.Project project)
+    {
+        _projectManager.LoadProject(project);
+        await _jsRuntime.InvokeVoidAsync("Utils.PreventChooseText");
+    }
 
 #region ProjectManagerDelegate
 #nullable enable

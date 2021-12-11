@@ -5,6 +5,7 @@
 @layout WorkspaceLayout
 @implements IDisposable
 @inject CourseManageService _courseManager
+@inject IJSRuntime _jsRuntime
 
 <course-container class="w-100 h-100 d-flex flex-column">
     <top-row></top-row>
@@ -24,8 +25,7 @@
                 }
                 else
                 {
-                    <li class="list-group-item d-flex justify-content-between"
-                        @ondblclick="@(() => _courseManager.LoadCourse(course))">
+                    <li class="list-group-item d-flex justify-content-between" @ondblclick="@(() => LoadCourse(course))">
                         <span>@course.CourseDetail.Title</span>
                         <span>@(progress ?? 0)%</span>
                     </li>
@@ -39,6 +39,12 @@
 
     [CascadingParameter]
     public WorkspaceLayout Layout { get; init; }
+
+    void LoadCourse(AlgorithmEasy.Shared.Models.Course course)
+    {
+        _courseManager.LoadCourse(course);
+        _jsRuntime.InvokeVoidAsync("Utils.PreventChooseText");
+    }
 
     #region CourseManagerDelegate
 #nullable enable

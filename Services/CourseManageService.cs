@@ -77,6 +77,15 @@ namespace AlgorithmEasy.StudentSide.Services
                 _client.DefaultRequestHeaders.Authorization = null;
         }
 
+        public void  LoadCourse(int courseId)
+        {
+            CurrentCourse = Courses.SingleOrDefault(c => c.CourseId == courseId);
+        }
+        public void LoadCourse(Course course)
+        {
+            LoadCourse(course.CourseId);
+        }
+
         #region HttpClient
         public async Task<ToastTuple> GetCourses()
         {

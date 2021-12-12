@@ -8,8 +8,11 @@
     <RootNamespace>AlgorithmEasy.StudentSide</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="$(Configuration) == Debug">
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="$(Configuration) == Release">
+    <PackageReference Include="AlgorithmEasy.Shared" Version="*" />
   </ItemGroup>
 
   <ItemGroup>

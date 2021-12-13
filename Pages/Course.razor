@@ -65,6 +65,7 @@
             if (tuple.Item1 != ToastLevel.Success)
             {
                 _toastService.ShowToast(tuple.Item1, tuple.Item2);
+                await base.OnInitializedAsync();
                 return;
             }
         }
@@ -73,6 +74,7 @@
             if (tuple.Item1 != ToastLevel.Success)
             {
                 _toastService.ShowToast(tuple.Item1, tuple.Item2);
+                await base.OnInitializedAsync();
                 return;
             }
         }

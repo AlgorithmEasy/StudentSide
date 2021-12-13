@@ -364,4 +364,6 @@ FodyWeavers.xsd
 
 .idea
 
-wwwroot/lib
+wwwroot/lib/*
+
+!wwwroot/lib/blockly

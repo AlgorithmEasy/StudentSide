@@ -132,11 +132,13 @@ namespace AlgorithmEasy.StudentSide.Services
 
         public async Task<ToastTuple> SaveProject()
         {
+            if (CurrentProject == null)
+                return new(ToastLevel.Error, "请先打开一个项目");
             try
             {
                 using var response = await _client.PutAsync(
-                    $"ProjectManage/SaveProject?projectName={CurrentProject!.ProjectName}",
-                    new StringContent(CurrentProject!.Workspace));
+                    $"ProjectManage/SaveProject?projectName={CurrentProject.ProjectName}",
+                    new StringContent(CurrentProject.Workspace));
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _authentication.Logout();
@@ -147,7 +149,6 @@ namespace AlgorithmEasy.StudentSide.Services
                 if (response.StatusCode == HttpStatusCode.OK)
                     return new(ToastLevel.Success, message);
 
-                CurrentProject = null;
                 return new(ToastLevel.Error, message);
             }
             catch

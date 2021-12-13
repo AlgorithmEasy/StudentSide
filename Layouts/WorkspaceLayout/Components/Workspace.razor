@@ -1,1 +1,30 @@
-﻿
+﻿@inject IJSRuntime _jsRuntime
+
+<workspace class="w-100 h-100 position-relative">
+    <blockly id="blocklyDiv" class="w-100 h-100" hidden="@(Type != DisplayMode.Blockly)"></blockly>
+    <pre class="w-100 h-100 overflow-auto p-1" hidden="@(Type != DisplayMode.Python)" ><code id="python-code"></code></pre>
+</workspace>
+
+
+@code
+{
+    DisplayMode Type { get; set; } = DisplayMode.Blockly;
+
+    void DisplayCode() => Type = DisplayMode.Python;
+    void DisplayBlockly() => Type = DisplayMode.Blockly;
+
+    enum DisplayMode
+    {
+        Blockly,
+        Python
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _jsRuntime.InvokeVoidAsync("Blockly.start", "blocklyDiv");
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+}

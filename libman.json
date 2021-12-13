@@ -49,6 +49,14 @@
         "styles/default.min.css",
         "languages/python.min.js"
       ]
+    },
+    {
+      "library": "limonte-sweetalert2@11.3.0",
+      "destination": "wwwroot/lib/limonte-sweetalert2/"
+    },
+    {
+      "library": "highlightjs-line-numbers.js@2.8.0",
+      "destination": "wwwroot/lib/highlightjs-line-numbers.js/"
     }
   ]
 }

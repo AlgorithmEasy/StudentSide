@@ -2,35 +2,43 @@
 @using AlgorithmEasy.Shared.Requests
 @using AlgorithmEasy.Shared.Statuses
 @using AlgorithmEasy.StudentSide.Shared.Enums
+@using AlgorithmEasy.StudentSide.Pages.Index.Components
 
-<index-container>
-    <div class="title">算法易</div>
+<index-container class="h-100 d-flex align-items-stretch flex-column justify-content-center flex-nowrap">
+    <div class="title text-center mb-3">算法易</div>
     <EditForm class="form-group" EditContext="Context" OnValidSubmit="LoginSubmit">
         <DataAnnotationsValidator/>
 
-        <p class="login-form-group">
+        <div class="px-2 mb-3">
             <InputText class="form-control login-form" placeholder="用户名" @bind-Value="LoginForm.UserId"/>
             <ValidationMessage For="() => LoginForm.UserId"/>
-        </p>
-        <p class="login-form-group">
+        </div>
+
+        <div class="px-2 mb-3">
             <InputText class="form-control login-form" type="password" placeholder="密码" @bind-Value="LoginForm.Password"/>
             <ValidationMessage For="() => LoginForm.Password"/>
-        </p>
-        <p class="login-form-group space-between">
+        </div>
+
+        <div class="px-2 mb-2 d-flex justify-content-between">
             <span>
                 <InputCheckbox @bind-Value="RememberPassword"></InputCheckbox>
                 <span>记住密码</span>
             </span>
             <span>忘记密码？</span>
-        </p>
-        <div class="login-form-group">
-            <button class="btn btn-primary login-form login-form-button blue-bg" type="submit">登 录</button>
         </div>
-        <p class="text-end">
-            还没有账户？<span class="text-primary">立即注册</span>
-        </p>
+        <div class="px-2">
+            <button class="btn btn-primary rounded-pill form-control login-form-button" type="submit">登 录</button>
+        </div>
+        <div class="form-text text-end px-2">
+            还没有账户？<span class="text-primary text-decoration-underline clickable"
+                        @onclick="@(() => Type = DisplayDialog.Register)">立即注册</span>
+        </div>
     </EditForm>
 </index-container>
+@if (Type == DisplayDialog.Register)
+{
+    <RegisterDialog CloseDialogCallback="CloseRegister"></RegisterDialog>
+}
 
 @code
 {
@@ -38,8 +46,9 @@
     public MainLayout Layout { get; init; }
 
     LoginRequest LoginForm { get; set; }
-
     EditContext Context { get; set; }
+
+    DisplayDialog Type { get; set; } = DisplayDialog.None;
 
     bool RememberPassword { get; set; }
 
@@ -76,6 +85,19 @@
         }
 
         _navigation.NavigateTo("/project");
+    }
+
+    async void CloseRegister()
+    {
+        Type = DisplayDialog.None;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    enum DisplayDialog
+    {
+        None,
+        Register,
+        FindPassword,
     }
 }
 

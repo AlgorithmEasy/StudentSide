@@ -3,7 +3,8 @@
 @using System.ComponentModel.DataAnnotations
 @inject UserManageService _userManager
 
-<register-dialog class="d-flex flex-column align-items-center justify-content-center">
+<mask class="vw-100 vh-100 bg-black opacity-50 position-fixed top-0"></mask>
+<register-dialog class="vw-100 vh-100 position-fixed top-0 d-flex flex-column align-items-center justify-content-center">
     <EditForm class="bg-white w-35 p-2 d-flex flex-column rounded-3" EditContext="Context" OnValidSubmit="SubmitForm">
         <DataAnnotationsValidator/>
 

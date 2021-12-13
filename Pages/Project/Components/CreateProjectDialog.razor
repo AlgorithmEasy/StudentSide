@@ -3,7 +3,8 @@
 @using AlgorithmEasy.StudentSide.Services
 @inject ProjectManageService _projectManager
 
-<create-project-dialog class="d-flex flex-column align-items-center justify-content-center">
+<mask class="vw-100 vh-100 bg-black opacity-50 position-fixed top-0"></mask>
+<create-project-dialog class="vw-100 vh-100 position-fixed top-0 d-flex flex-column align-items-center justify-content-center">
     <EditForm class="bg-white w-25 p-2 d-flex flex-column" EditContext="Context" OnValidSubmit="SubmitForm">
         <DataAnnotationsValidator/>
 

@@ -19,7 +19,7 @@ namespace AlgorithmEasy.StudentSide.Services.Authentication
         public ProductAuthentication(HttpClient client)
         {
             _client = client;
-            _client.BaseAddress = new Uri("https://localhost:6001");
+            _client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("ALGORITHMEASY_USER_CENTER_URL")!);
         }
 
         public override async Task<LoginStatus> Login(LoginRequest request)

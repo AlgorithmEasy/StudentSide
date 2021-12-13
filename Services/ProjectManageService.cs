@@ -57,7 +57,7 @@ namespace AlgorithmEasy.StudentSide.Services
             _authentication = authentication;
 
             _client = client;
-            _client.BaseAddress = new Uri("https://localhost:7001");
+            _client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("ALGORITHMEASY_PROJECT_CENTER_URL")!);
 
             var jwt = authentication.GetAuthenticationStateAsync().Result.User?.FindFirst("Json Web Token")?.Value;
             if (!string.IsNullOrEmpty(jwt))

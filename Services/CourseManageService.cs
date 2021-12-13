@@ -66,7 +66,7 @@ namespace AlgorithmEasy.StudentSide.Services
         public CourseManageService(HttpClient client, AuthenticationService authentication)
         {
             _client = client;
-            _client.BaseAddress = new Uri("https://localhost:8001");
+            _client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("ALGORITHMEASY_COURSE_CENTER_URL")!);
 
             _authentication = authentication;
 

@@ -1,0 +1,131 @@
+﻿@using AlgorithmEasy.Shared.Requests
+@using AlgorithmEasy.StudentSide.Services
+@using System.ComponentModel.DataAnnotations
+@inject UserManageService _userManager
+
+<register-dialog class="d-flex flex-column align-items-center justify-content-center">
+    <EditForm class="bg-white w-35 p-2 d-flex flex-column rounded-3" EditContext="Context" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator/>
+
+        <legend class="mb-3 px-3">创建您的账户</legend>
+
+        <dialog-body class="d-flex flex-column justify-content-between">
+            <div class="px-2 row g-3 align-items-center">
+                <div class="col-2">
+                    <label class="col-form-label">用户名</label>
+                </div>
+                <div class="col-lg-auto">
+                    <InputText class="form-control" placeholder="用户名" @bind-Value="Form.UserId"/>
+                </div>
+                <div class="col-auto">
+                    <div class="form-text">不超过30个字符。</div>
+                </div>
+            </div>
+            <div class="mb-3 px-2 row">
+                <ValidationMessage For="@(() => Form.UserId)"/>
+            </div>
+
+            <div class="px-2 row g-3 align-items-center">
+                <div class="col-2">
+                    <label class="col-form-label">密码</label>
+                </div>
+                <div class="col-lg-auto">
+                    <InputText class="form-control" type="password" placeholder="密码" @bind-Value="Form.Password"/>
+                </div>
+                <div class="col-auto">
+                    <InputText class="form-control" type="password" placeholder="确认密码" @bind-Value="Form.PasswordConfirm"/>
+                </div>
+            </div>
+            <div class="mb-3 px-2">
+                <ValidationMessage For="@(() => Form.Password)"/>
+            </div>
+
+            <div class="px-2 row g-3 align-items-center">
+                <div class="col-2">
+                    <label class="col-form-label">昵称</label>
+                </div>
+                <div class="col-lg-auto">
+                    <InputText class="form-control" placeholder="昵称" @bind-Value="Form.Nickname"/>
+                </div>
+                <div class="col-auto">
+                    <div class="form-text">不超过20个字符。</div>
+                </div>
+            </div>
+            <div class="mb-3 px-2 row">
+                <ValidationMessage For="@(() => Form.Nickname)"/>
+            </div>
+
+            <div class="px-2 row g-3 align-items-center">
+                <div class="col-2">
+                    <label class="col-form-label">电子邮箱</label>
+                </div>
+                <div class="col-lg-auto">
+                    <InputText class="form-control" placeholder="电子邮箱" @bind-Value="Form.Email"/>
+                </div>
+                <div class="col-auto">
+                    <div class="form-text">不超过30个字符。</div>
+                </div>
+            </div>
+            <div class="mb-3 px-2 row">
+                <ValidationMessage For="@(() => Form.Email)"/>
+            </div>
+
+            <div class="mb-1 px-2">
+                <button class="btn btn-primary form-control rounded-pill" type="submit">下一步</button>
+            </div>
+            <div class="form-text text-end px-2">
+                已有帐户？<span class="text-primary text-decoration-underline clickable"
+                           @onclick="@CloseDialog">立即登录</span>
+            </div>
+        </dialog-body>
+    </EditForm>
+</register-dialog>
+
+@code {
+
+    [Required] [Parameter] public EventCallback CloseDialogCallback { get; set; }
+
+    RegisterRequest Form { get; set; }
+    EditContext Context { get; set; }
+    ValidationMessageStore MessageStore { get; set; }
+
+#nullable enable
+    void PasswordConfirmValidation(object? _, ValidationRequestedEventArgs args)
+#nullable disable
+    {
+        if (string.IsNullOrEmpty(Form.Password)) return;
+        MessageStore.Clear(() => Form.Password);
+        if (string.IsNullOrEmpty(Form.PasswordConfirm))
+        {
+            MessageStore.Add(() => Form.Password, "请再次输入密码。");
+            return;
+        }
+        if (Form.PasswordConfirm  != Form.Password)
+            MessageStore.Add(() => Form.Password, "两次输入密码不一致，请重新输入。");
+    }
+
+    async void SubmitForm()
+    {
+        Form.RoleId = 3;
+        var (level, message) = await _userManager.Register(Form);
+        _toastService.ShowToast(level, message);
+        if (level == ToastLevel.Success)
+            CloseDialog();
+    }
+
+    async void CloseDialog()
+    {
+        await CloseDialogCallback.InvokeAsync();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        Form = new();
+        Context = new(Form);
+        MessageStore = new(Context);
+
+        Context.OnValidationRequested += PasswordConfirmValidation;
+        return base.OnInitializedAsync();
+    }
+
+}

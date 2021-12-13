@@ -30,10 +30,10 @@ namespace AlgorithmEasy.StudentSide
 
             services.AddBlazoredToast();
 
-            services.AddSingleton<AuthenticationService, ProductAuthentication>();
+            services.AddScoped<AuthenticationService, ProductAuthentication>();
             services.AddScoped<AuthenticationStateProvider>(p => p.GetService<AuthenticationService>());
 
-            services.AddSingleton<ProjectManageService>();
+            services.AddScoped<ProjectManageService>();
             services.AddScoped<CourseManageService>();
 
             services.AddHttpClient();

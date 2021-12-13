@@ -35,6 +35,7 @@ namespace AlgorithmEasy.StudentSide
 
             services.AddScoped<ProjectManageService>();
             services.AddScoped<CourseManageService>();
+            services.AddScoped<UserManageService>();
 
             services.AddHttpClient();
         }

@@ -25,7 +25,7 @@
                 }
                 else
                 {
-                    <li class="list-group-item d-flex justify-content-between" @ondblclick="@(() => LoadCourse(course))">
+                    <li class="list-group-item d-flex justify-content-between" @onclick="@(() => LoadCourse(course))">
                         <span>@course.CourseDetail.Title</span>
                         <span>@(progress ?? 0)%</span>
                     </li>

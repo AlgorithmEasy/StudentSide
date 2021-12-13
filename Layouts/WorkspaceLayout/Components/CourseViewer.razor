@@ -4,7 +4,7 @@
 @inject IJSRuntime _jsRuntime
 @inject CourseManageService _courseManager
 
-<course-viewer-container class="w-100 h-100">
+<course-viewer-container class="w-100 h-100 overflow-auto">
     @((MarkupString) ContentHtml)
 </course-viewer-container>
 

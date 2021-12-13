@@ -9,10 +9,8 @@
             @Body
         </left>
         <right class="h-100 d-flex flex-column">
-            <div class="w-100 h-75 d-flex">
-                <div class="@(ShowCourseViewer ? "w-50" : "w-100")">
-                    <Workspace></Workspace>
-                </div>
+            <div class="w-100 h-75 d-flex p-2">
+                <Workspace></Workspace>
                 @if (ShowCourseViewer)
                 {
                     <CourseViewer></CourseViewer>

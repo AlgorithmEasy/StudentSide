@@ -11,7 +11,6 @@ COPY ["StudentSide.csproj", "."]
 RUN --mount=type=secret,id=package_token \
     TOKEN=`cat /run/secrets/package_token` && \
     dotnet nuget add source --username AlgorithmEasy --password $TOKEN --store-password-in-clear-text --name github "https://nuget.pkg.github.com/AlgorithmEasy/index.json"
-RUN dotnet restore "StudentSide.csproj"
 COPY . .
 RUN dotnet build "StudentSide.csproj" -c Release -o /app/build
 
@@ -21,4 +20,4 @@ RUN dotnet publish "StudentSide.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "StudentSide.dll"]
+ENTRYPOINT ["dotnet", "AlgorithmEasy.StudentSide.dll"]

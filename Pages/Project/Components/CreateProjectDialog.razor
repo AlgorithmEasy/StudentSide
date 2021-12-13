@@ -29,7 +29,7 @@
 
     [Required] [Parameter] public EventCallback CloseDialogCallback { get; set; }
 
-    CreateProjectForm Form { get; set; }
+    CreateProjectRequest Form { get; set; }
     EditContext Context { get; set; }
 
     async Task SubmitForm()
@@ -56,13 +56,6 @@
         Form = new();
         Context = new(Form);
         return base.OnInitializedAsync();
-    }
-
-    class CreateProjectForm
-    {
-        [Required(ErrorMessage = "项目名不得为空。")]
-        [MaxLength(30, ErrorMessage = "项目名称不得超过30字。")]
-        public string ProjectName { get; set; }
     }
 
 }

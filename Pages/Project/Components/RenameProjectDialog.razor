@@ -12,9 +12,9 @@
         <form-body class="d-flex flex-column justify-content-between">
             <div class="mb-3 px-3">
                 <label class="form-label">新项目名称</label>
-                <InputText class="form-control" placeholder="项目名称" @bind-Value="Form.ProjectName"/>
-                <ValidationMessage For="@(() => Form.ProjectName)"/>
-                <div class="form-text">原项目名称：@OldProjectName</div>
+                <InputText class="form-control" placeholder="项目名称" @bind-Value="Form.NewProjectName"/>
+                <ValidationMessage For="@(() => Form.NewProjectName)"/>
+                <div class="form-text">原项目名称：@Form.OldProjectName</div>
             </div>
 
             <div class="w-50 d-flex px-3">
@@ -31,13 +31,13 @@
     [Required] [Parameter] public string OldProjectName { get; set; }
     [Required] [Parameter] public EventCallback CloseDialogCallback { get; set; }
 
-    UpdateProjectForm Form { get; set; }
+    RenameProjectRequest Form { get; set; }
     EditContext Context { get; set; }
 
     async Task SubmitForm()
     {
         {
-            var (level, message) = await _projectManager.RenameProject(OldProjectName, Form.ProjectName);
+            var (level, message) = await _projectManager.RenameProject(Form.OldProjectName, Form.NewProjectName);
             _toastService.ShowToast(level, message);
             if (level != ToastLevel.Success) return;
         }
@@ -54,16 +54,12 @@
 
     protected override Task OnInitializedAsync()
     {
-        Form = new();
+        Form = new RenameProjectRequest
+        {
+            OldProjectName = OldProjectName
+        };
         Context = new(Form);
         return base.OnInitializedAsync();
-    }
-
-    class UpdateProjectForm
-    {
-        [Required(ErrorMessage = "项目名不得为空。")]
-        [MaxLength(30, ErrorMessage = "项目名称不得超过30字。")]
-        public string ProjectName { get; set; }
     }
 
 }

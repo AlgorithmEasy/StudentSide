@@ -22,8 +22,4 @@
     <PackageReference Include="Blazored.Toast" Version="3.2.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include=".github\workflows\publish.yml" />
-  </ItemGroup>
-
 </Project>

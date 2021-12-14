@@ -90,6 +90,27 @@ Blockly.clearWorkspace = function () {
     Blockly.workspace.clear();
 };
 
+Blockly.resizeWorkspace = () => {
+    const blocklyArea = document.getElementById('blockly');
+    let element = blocklyArea;
+    if (!element || !Blockly.workspace) return;
+    let x = 0;
+    let y = 0;
+    do {
+        x += element.offsetLeft;
+        y += element.offsetTop;
+        element = element.offsetParent;
+    } while (element);
+    if (x === 0 && y === 0) return;
+
+    const blocklyDiv = document.getElementById(Blockly.blocklyDiv);
+    blocklyDiv.style.left = x + 'px';
+    blocklyDiv.style.top = y + 'px';
+    blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+    blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+    Blockly.svgResize(Blockly.workspace);
+}
+
 /**
  * 设置全局饱和度和亮度。
  */
@@ -199,6 +220,7 @@ Blockly.configCategory = function () {
  */
 Blockly.start = function (blockDiv) {
     // 覆写 Blockly 的 alert 和 prompt 实现.
+    Blockly.blocklyDiv = blockDiv;
     Blockly.alert = function(message, opt_callback) {
         Swal.fire(message).then(() => {
             if (opt_callback) {

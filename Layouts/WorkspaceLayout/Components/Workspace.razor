@@ -1,9 +1,10 @@
 ﻿@inject IJSRuntime _jsRuntime
 
-<workspace class="w-100 h-100 position-relative">
-    <blockly id="blocklyDiv" class="w-100 h-100" hidden="@(Type != DisplayMode.Blockly)"></blockly>
-    <pre class="w-100 h-100 overflow-auto p-1" hidden="@(Type != DisplayMode.Python)" ><code id="python-code"></code></pre>
+<workspace class="w-100 h-100">
+    <div id="blockly" class="w-100 h-100"></div>
+    <pre class="w-100 h-100 overflow-auto p-1" hidden="@(Type != DisplayMode.Python)"><code id="python-code"></code></pre>
 </workspace>
+<blockly id="blocklyDiv" class="position-fixed" hidden="@(Type != DisplayMode.Blockly)"></blockly>
 
 
 @code
@@ -19,12 +20,12 @@
         Python
     }
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _jsRuntime.InvokeVoidAsync("Blockly.start", "blocklyDiv");
+            await _jsRuntime.InvokeVoidAsync("Blockly.start", "blocklyDiv");
         }
-        return base.OnAfterRenderAsync(firstRender);
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

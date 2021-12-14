@@ -49,6 +49,7 @@
 
     void LoadProject(AlgorithmEasy.Shared.Models.Project project)
     {
+        Layout.Type = WorkspaceLayout.DisplayType.Workspace;
         _projectManager.LoadProject(project);
     }
 
@@ -82,8 +83,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Layout.ShowCourseViewer = false;
         Layout.Page = Page.Project;
+        if (_projectManager.CurrentProject == null)
+            Layout.Type = WorkspaceLayout.DisplayType.None;
+        else
+            Layout.Type = WorkspaceLayout.DisplayType.Workspace;
+
 
         {
             var tuple = await _projectManager.GetPersonalProjects();

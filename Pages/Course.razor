@@ -42,6 +42,7 @@
 
     void LoadCourse(AlgorithmEasy.Shared.Models.Course course)
     {
+        Layout.Type = WorkspaceLayout.DisplayType.Both;
         _courseManager.LoadCourse(course);
     }
 
@@ -56,8 +57,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Layout.ShowCourseViewer = true;
         Layout.Page = Page.Course;
+        if (_courseManager.CurrentCourse == null)
+            Layout.Type = WorkspaceLayout.DisplayType.None;
+        else
+            Layout.Type = WorkspaceLayout.DisplayType.Both;
 
         {
             var tuple = await _courseManager.GetCourses();

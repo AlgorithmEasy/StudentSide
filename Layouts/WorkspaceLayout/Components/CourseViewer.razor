@@ -4,11 +4,14 @@
 @inject IJSRuntime _jsRuntime
 @inject CourseManageService _courseManager
 
-<course-viewer-container class="w-100 h-100 overflow-auto">
+<course-viewer-container class="w-100 h-100">
     @((MarkupString) ContentHtml)
 </course-viewer-container>
 
 @code {
+
+    [CascadingParameter]
+    public WorkspaceLayout Layout { get; set; }
 
         const string NoContentMessage = "* 该课程暂时没有内容哦。";
 

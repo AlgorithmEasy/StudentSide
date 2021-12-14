@@ -260,6 +260,7 @@ Blockly.start = function (blockDiv) {
                     renderer: "zelos"
                 });
             Blockly.workspace.addChangeListener(Blockly.workspaceUpdate);
+            window.addEventListener('resize', Blockly.resizeWorkspace, false);
         }
     };
     xhttp.send();

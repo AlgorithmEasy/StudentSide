@@ -7,33 +7,30 @@
 @inject CourseManageService _courseManager
 @inject IJSRuntime _jsRuntime
 
-<course-container class="w-100 h-100 d-flex flex-column">
-    <top-row></top-row>
-    <div class="px-3 fs-3">我的课程</div>
-    <course-list>
-        <ul class="list-group list-group-flush my-3">
-            @foreach (var course in _courseManager.Courses)
+<div class="px-3 fs-3">我的课程</div>
+<course-list>
+    <ul class="list-group list-group-flush my-3">
+        @foreach (var course in _courseManager.Courses)
+        {
+            var progress = _courseManager.LearningHistories
+                .SingleOrDefault(h => h.CourseId == course.CourseId)?.Progress;
+            @if (course.CourseId == _courseManager.CurrentCourse?.CourseId)
             {
-                var progress = _courseManager.LearningHistories
-                    .SingleOrDefault(h => h.CourseId == course.CourseId)?.Progress;
-                @if (course.CourseId == _courseManager.CurrentCourse?.CourseId)
-                {
-                    <li class="list-group-item active d-flex justify-content-between">
-                        <span>@course.CourseDetail.Title</span>
-                        <span>@(progress ?? 0)%</span>
-                    </li>
-                }
-                else
-                {
-                    <li class="list-group-item d-flex justify-content-between" @onclick="@(() => LoadCourse(course))">
-                        <span>@course.CourseDetail.Title</span>
-                        <span>@(progress ?? 0)%</span>
-                    </li>
-                }
+                <li class="list-group-item active d-flex justify-content-between">
+                    <span>@course.CourseDetail.Title</span>
+                    <span>@(progress ?? 0)%</span>
+                </li>
             }
-        </ul>
-    </course-list>
-</course-container>
+            else
+            {
+                <li class="list-group-item d-flex justify-content-between" @onclick="@(() => LoadCourse(course))">
+                    <span>@course.CourseDetail.Title</span>
+                    <span>@(progress ?? 0)%</span>
+                </li>
+            }
+        }
+    </ul>
+</course-list>
 
 @code {
 
@@ -42,7 +39,7 @@
 
     void LoadCourse(AlgorithmEasy.Shared.Models.Course course)
     {
-        Layout.Type = WorkspaceLayout.DisplayType.Both;
+        Layout.Display = WorkspaceLayout.DisplayType.Both;
         _courseManager.LoadCourse(course);
     }
 
@@ -59,9 +56,9 @@
     {
         Layout.Page = Page.Course;
         if (_courseManager.CurrentCourse == null)
-            Layout.Type = WorkspaceLayout.DisplayType.None;
+            Layout.Display = WorkspaceLayout.DisplayType.None;
         else
-            Layout.Type = WorkspaceLayout.DisplayType.Both;
+            Layout.Display = WorkspaceLayout.DisplayType.Both;
 
         {
             var (level, message) = await _courseManager.GetCourses();

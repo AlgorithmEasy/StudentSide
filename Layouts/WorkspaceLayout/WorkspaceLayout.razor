@@ -7,14 +7,23 @@
 <CascadingValue Value="@this">
     <workspace-layout-container class="d-flex vw-100 h-100">
         <left class="h-100">
-            @Body
+            <source-list-container class="w-100 h-100 d-flex flex-column">
+                <top-row class="w-100 d-flex justify-content-end align-items-center px-3">
+                    @if (Page == Page.Project)
+                    {
+                        <i class="fas fa-save mx-1 fa-lg"></i>
+                        <i class="fas fa-plus mx-1 fa-lg" @onclick="@OpenCreateProjectDialog"></i>
+                    }
+                </top-row>
+                @Body
+            </source-list-container>
         </left>
         <right class="h-100 d-flex flex-column">
             <div class="w-100 h-75 d-flex p-2">
-                <blockly class="w-100 h-100" hidden="@(!Type.HasFlag(DisplayType.Workspace))">
+                <blockly class="w-100 h-100" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
                     <Workspace></Workspace>
                 </blockly>
-                <div class="w-100 h-100 overflow-auto" hidden="@(!Type.HasFlag(DisplayType.CourseViewer))">
+                <div class="w-100 h-100 overflow-auto" hidden="@(!Display.HasFlag(DisplayType.CourseViewer))">
                     <CourseViewer></CourseViewer>
                 </div>
             </div>
@@ -24,23 +33,43 @@
         </right>
     </workspace-layout-container>
 </CascadingValue>
+@if (Dialog == DialogType.CreateProject)
+{
+    <CreateProjectDialog CloseDialogCallback="@CloseDialog"></CreateProjectDialog>
+}
 
 @code
 {
     [CascadingParameter]
     public MainLayout Layout { get; set; }
 
-    DisplayType _type;
-    public DisplayType Type
+    DisplayType _display;
+    public DisplayType Display
     {
-        get => _type;
+        get => _display;
         set
         {
-            if (_type == value) return;
-            _type = value;
+            if (_display == value) return;
+            _display = value;
             InvokeAsync(StateHasChanged);
         }
     }
+
+    DialogType Dialog { get; set; }
+
+    #region DialogParamters
+    void OpenCreateProjectDialog()
+    {
+        Dialog = DialogType.CreateProject;
+        InvokeAsync(StateHasChanged);
+    }
+
+    void CloseDialog()
+    {
+        Dialog = DialogType.None;
+        InvokeAsync(StateHasChanged);
+    }
+    #endregion
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -51,11 +80,18 @@
 
     public Page Page
     {
+        get => Layout.Page;
         set
         {
             Layout.Page = value;
             InvokeAsync(StateHasChanged);
         }
+    }
+
+    public enum DialogType
+    {
+        None,
+        CreateProject,
     }
 
     [Flags]

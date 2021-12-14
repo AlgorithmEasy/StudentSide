@@ -5,3 +5,11 @@ left {
 right {
     width: 85%;
 }
+
+top-row {
+    height: 3%;
+}
+
+.fas {
+    cursor: pointer;
+}

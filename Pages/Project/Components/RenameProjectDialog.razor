@@ -39,18 +39,19 @@
     {
         {
             var (level, message) = await _projectManager.RenameProject(Form.OldProjectName, Form.NewProjectName);
-            _toastService.ShowToast(level, message);
+            _toastService.ShowToast(level, message, "项目更名");
             if (level != ToastLevel.Success) return;
         }
+
+        await CloseDialogCallback.InvokeAsync();
+
         {
             var(level, message) = await _projectManager.GetPersonalProjects();
             if (level != ToastLevel.Success)
             {
-                _toastService.ShowToast(level, message);
-                return;
+                _toastService.ShowToast(level, message, "加载项目列表");
             }
         }
-        await CloseDialogCallback.InvokeAsync();
     }
 
     protected override Task OnInitializedAsync()

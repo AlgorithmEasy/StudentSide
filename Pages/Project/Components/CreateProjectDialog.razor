@@ -44,7 +44,7 @@
             var(level, message) = await _projectManager.GetPersonalProjects();
             if (level != ToastLevel.Success)
             {
-                _toastService.ShowToast(level, message, "加载项目");
+                _toastService.ShowToast(level, message, "加载项目列表");
                 return;
             }
         }

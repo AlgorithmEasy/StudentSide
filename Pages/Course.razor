@@ -64,19 +64,19 @@
             Layout.Type = WorkspaceLayout.DisplayType.Both;
 
         {
-            var tuple = await _courseManager.GetCourses();
-            if (tuple.Item1 != ToastLevel.Success)
+            var (level, message) = await _courseManager.GetCourses();
+            if (level != ToastLevel.Success)
             {
-                _toastService.ShowToast(tuple.Item1, tuple.Item2);
+                _toastService.ShowToast(level, message, "加载课程列表");
                 await base.OnInitializedAsync();
                 return;
             }
         }
         {
-            var tuple = await _courseManager.GetPersonalLearningHistories();
-            if (tuple.Item1 != ToastLevel.Success)
+            var (level, message) = await _courseManager.GetPersonalLearningHistories();
+            if (level != ToastLevel.Success)
             {
-                _toastService.ShowToast(tuple.Item1, tuple.Item2);
+                _toastService.ShowToast(level, message, "获取学习记录");
                 await base.OnInitializedAsync();
                 return;
             }

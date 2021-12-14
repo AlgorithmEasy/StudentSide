@@ -91,9 +91,9 @@
 
 
         {
-            var tuple = await _projectManager.GetPersonalProjects();
-            if (tuple.Item1 != ToastLevel.Success)
-                _toastService.ShowToast(tuple.Item1, tuple.Item2);
+            var (level, message) = await _projectManager.GetPersonalProjects();
+            if (level != ToastLevel.Success)
+                _toastService.ShowToast(level, message, "加载项目列表");
             await base.OnInitializedAsync();
         }
 

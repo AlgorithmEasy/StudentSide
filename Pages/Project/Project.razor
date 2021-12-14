@@ -47,10 +47,9 @@
 
     DialogType Type { get; set; }
 
-    async void LoadProject(AlgorithmEasy.Shared.Models.Project project)
+    void LoadProject(AlgorithmEasy.Shared.Models.Project project)
     {
         _projectManager.LoadProject(project);
-        await _jsRuntime.InvokeVoidAsync("Utils.PreventChooseText");
     }
 
 #region ProjectManagerDelegate

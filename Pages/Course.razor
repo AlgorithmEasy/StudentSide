@@ -43,7 +43,6 @@
     void LoadCourse(AlgorithmEasy.Shared.Models.Course course)
     {
         _courseManager.LoadCourse(course);
-        _jsRuntime.InvokeVoidAsync("Utils.PreventChooseText");
     }
 
     #region CourseManagerDelegate

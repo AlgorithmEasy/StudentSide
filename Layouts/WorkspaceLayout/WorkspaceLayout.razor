@@ -89,7 +89,7 @@
         {
             if (_display == value) return;
             _display = value;
-            InvokeAsync(StateHasChanged);
+            StateHasChanged();
         }
     }
 

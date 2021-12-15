@@ -47,7 +47,15 @@
 #region ProjectManagerDelegate
 #nullable enable
     void ProjectsChanged(object? _, IEnumerable<AlgorithmEasy.Shared.Models.Project> projects) => InvokeAsync(StateHasChanged);
-    void CurrentProjectChanged(object? _, AlgorithmEasy.Shared.Models.Project? project) => InvokeAsync(StateHasChanged);
+
+    async void CurrentProjectChanged(object? _, AlgorithmEasy.Shared.Models.Project? project)
+    {
+        if (string.IsNullOrEmpty(project?.Workspace))
+            await _jsRuntime.InvokeVoidAsync("Blockly.clearWorkspace");
+        else
+            await _jsRuntime.InvokeVoidAsync("Blockly.importWorkspace", project.Workspace);
+        StateHasChanged();
+    }
 #nullable disable
 #endregion
 

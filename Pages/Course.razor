@@ -49,6 +49,15 @@
         InvokeAsync(StateHasChanged);
     void LearningHistoriesSet(object? _, IEnumerable<AlgorithmEasy.Shared.Models.LearningHistory> learningHistories) =>
         InvokeAsync(StateHasChanged);
+
+    async void LoadCourseWorkspace(object? _, AlgorithmEasy.Shared.Models.Course? course)
+    {
+        if (string.IsNullOrEmpty(course?.CourseDetail?.Workspace))
+            await _jsRuntime.InvokeVoidAsync("Blockly.clearWorkspace");
+        else
+            await _jsRuntime.InvokeVoidAsync("Blockly.importWorkspace", course.CourseDetail.Workspace);
+        StateHasChanged();
+    }
 #nullable disable
     #endregion
 
@@ -81,6 +90,8 @@
 
         _courseManager.OnCoursesSet += CoursesSet;
         _courseManager.OnLearningHistoriesSet += LearningHistoriesSet;
+        _courseManager.OnCurrentCourseChanged += LoadCourseWorkspace;
+
         await base.OnInitializedAsync();
     }
 
@@ -88,6 +99,7 @@
     {
         _courseManager.OnCoursesSet -= CoursesSet;
         _courseManager.OnLearningHistoriesSet -= LearningHistoriesSet;
+        _courseManager.OnCurrentCourseChanged -= LoadCourseWorkspace;
     }
 
 }

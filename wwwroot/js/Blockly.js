@@ -89,7 +89,7 @@ Blockly.clearWorkspace = function () {
     Blockly.workspace.clear();
 };
 
-Blockly.resizeWorkspace = () => {
+Blockly.resizeWorkspace = (mask) => {
     const blocklyArea = document.getElementById('blockly');
     let element = blocklyArea;
     if (!element || !Blockly.workspace) return;
@@ -108,6 +108,13 @@ Blockly.resizeWorkspace = () => {
     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
     Blockly.svgResize(Blockly.workspace);
+    if (mask) {
+        const blocklyMask = document.getElementById('blocklyMask');
+        blocklyMask.style.left = x + 'px';
+        blocklyMask.style.top = y + 'px';
+        blocklyMask.style.width = blocklyArea.offsetWidth + 'px';
+        blocklyMask.style.height = blocklyArea.offsetHeight + 'px';
+    }
 }
 
 /**

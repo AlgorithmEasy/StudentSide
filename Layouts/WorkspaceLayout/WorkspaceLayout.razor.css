@@ -13,3 +13,7 @@ top-row {
 .fas {
     cursor: pointer;
 }
+
+mask {
+    z-index: 300;
+}

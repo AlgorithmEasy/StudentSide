@@ -71,6 +71,8 @@
         </right>
     </workspace-layout-container>
 </CascadingValue>
+<mask id="blocklyMask" class="position-fixed" hidden="@(Page == Page.Project)"></mask>
+
 @if (Dialog == DialogType.CreateProject)
 {
     <CreateProjectDialog CloseDialogCallback="@CloseDialog"></CreateProjectDialog>
@@ -163,8 +165,10 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await _jsRuntime.InvokeVoidAsync("Blockly.resizeWorkspace");
-        await _jsRuntime.InvokeVoidAsync("Terminal.TerminalScrollToBottom");
+        if (firstRender) {
+            await _jsRuntime.InvokeVoidAsync("Terminal.TerminalScrollToBottom");
+        }
+        await _jsRuntime.InvokeVoidAsync("Blockly.resizeWorkspace", Page == Page.Course);
         await base.OnAfterRenderAsync(firstRender);
     }
 

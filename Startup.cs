@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using AlgorithmEasy.Shared.Services;
 using AlgorithmEasy.StudentSide.Services;
 using AlgorithmEasy.StudentSide.Services.Authentication;
@@ -6,6 +6,7 @@ using Blazored.Toast;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,11 +39,19 @@ namespace AlgorithmEasy.StudentSide
             services.AddScoped<UserManageService>();
 
             services.AddHttpClient();
+
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

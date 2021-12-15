@@ -19,17 +19,47 @@
             </source-list-container>
         </left>
         <right class="h-100 d-flex flex-column">
-            <div class="w-100 h-75 d-flex">
-                <blockly class="w-100 h-100 p-2" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
-                    <Workspace></Workspace>
-                </blockly>
-                <div class="w-100 h-100 overflow-auto p-2" hidden="@(!Display.HasFlag(DisplayType.CourseViewer))">
-                    <CourseViewer></CourseViewer>
-                </div>
-            </div>
-            <div class="w-100 h-25 p-2">
-                <Terminal></Terminal>
-            </div>
+            <display-container class="w-100 h-100 d-flex flex-column">
+                <top-row class="w-100 d-flex justify-content-end align-items-center px-5">
+                    @if (Page == Page.Course)
+                    {
+                        @if (Display.HasFlag(DisplayType.Workspace))
+                        {
+
+                            <i class="fas fa-book-open mx-1 fa-lg"
+                               @onclick="@DisplayCourseViewer"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-book mx-1 fa-lg"
+                               @onclick="@HideCourseViewer"></i>
+                        }
+                    }
+                    @switch (Workspace?.Type)
+                    {
+                        case Workspace.DisplayMode.Blockly:
+                            <i class="fas fa-code mx-1 fa-lg"
+                               @onclick="@DisplayPython"></i>
+                            break;
+                        case Workspace.DisplayMode.Python:
+                            <i class="fas fa-cubes mx-1 fa-lg"
+                               @onclick="@DisplayBlockly"></i>
+                            break;
+                    }
+                    <i class="fas fa-play mx-1 fa-lg"></i>
+                </top-row>
+                <display-body class="w-100 h-75 d-flex">
+                    <blockly class="w-100 h-100 p-2" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
+                        <Workspace @ref="Workspace"></Workspace>
+                    </blockly>
+                    <div class="w-100 h-100 overflow-auto p-2" hidden="@(!Display.HasFlag(DisplayType.CourseViewer))">
+                        <CourseViewer></CourseViewer>
+                    </div>
+                </display-body>
+                <display-footer class="w-100 h-25 p-2">
+                    <Terminal></Terminal>
+                </display-footer>
+            </display-container>
         </right>
     </workspace-layout-container>
 </CascadingValue>
@@ -55,9 +85,41 @@
         }
     }
 
-    DialogType Dialog { get; set; }
+    #region CourseViewer
+    void DisplayCourseViewer()
+    {
+        if (Display == DisplayType.None) return;
+        Display |= DisplayType.CourseViewer;
+        StateHasChanged();
+    }
+    void HideCourseViewer()
+    {
+        if (Display ==DisplayType.None) return;
+        Display &= DisplayType.Workspace;
+        StateHasChanged();
+    }
+    #endregion
+
+    #region Workspace
+    Workspace Workspace { get; set; }
+
+    void DisplayBlockly()
+    {
+        if (!Display.HasFlag(DisplayType.Workspace)) return;
+        Workspace.DisplayBlockly();
+        StateHasChanged();
+    }
+    void DisplayPython()
+    {
+        if (!Display.HasFlag(DisplayType.Workspace)) return;
+        Workspace.DisplayPython();
+        StateHasChanged();
+    }
+    #endregion
 
     #region DialogParamters
+    DialogType Dialog { get; set; }
+
     void OpenCreateProjectDialog()
     {
         Dialog = DialogType.CreateProject;
@@ -74,7 +136,6 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await _jsRuntime.InvokeVoidAsync("Blockly.resizeWorkspace");
-        Console.WriteLine(1);
         await base.OnAfterRenderAsync(firstRender);
     }
 
@@ -97,7 +158,7 @@
     [Flags]
     public enum DisplayType
     {
-        None,
+        None = 0,
         Workspace,
         CourseViewer,
         Both = Workspace | CourseViewer,

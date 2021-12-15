@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime _jsRuntime
 
 <workspace class="w-100 h-100">
-    <div id="blockly" class="w-100 h-100"></div>
+    <div id="blockly" class="w-100 h-100" hidden="@(Type != DisplayMode.Blockly)"></div>
     <pre class="w-100 h-100 overflow-auto" hidden="@(Type != DisplayMode.Python)"><code id="python-code"></code></pre>
 </workspace>
 <blockly id="blocklyDiv" class="position-fixed" hidden="@(Type != DisplayMode.Blockly)"></blockly>
@@ -9,12 +9,21 @@
 
 @code
 {
-    DisplayMode Type { get; set; } = DisplayMode.Blockly;
+    public DisplayMode Type { get; private set; } = DisplayMode.Blockly;
 
-    void DisplayCode() => Type = DisplayMode.Python;
-    void DisplayBlockly() => Type = DisplayMode.Blockly;
+    public void DisplayBlockly()
+    {
+        Type = DisplayMode.Blockly;
+        StateHasChanged();
+    }
 
-    enum DisplayMode
+    public void DisplayPython()
+    {
+        Type = DisplayMode.Python;
+        StateHasChanged();
+    }
+
+    public enum DisplayMode
     {
         Blockly,
         Python

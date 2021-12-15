@@ -1,0 +1,16 @@
+mask {
+    z-index: 200;
+}
+
+save-project-dialog {
+    z-index: 350;
+}
+
+dialog-body {
+    height: 80%;
+}
+
+.validation-message {
+    position: absolute;
+    margin-left: 8%;
+}

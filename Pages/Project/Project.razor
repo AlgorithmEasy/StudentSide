@@ -3,6 +3,7 @@
 @using AlgorithmEasy.StudentSide.Services
 @using AlgorithmEasy.StudentSide.Shared.Enums
 @using AlgorithmEasy.StudentSide.Pages.Project.Components
+@using AlgorithmEasy.StudentSide.Shared.Components
 @layout WorkspaceLayout
 @inject ProjectManageService _projectManager
 @inject IJSRuntime _jsRuntime
@@ -19,7 +20,7 @@
             }
             else
             {
-                <li class="list-group-item" @onclick="@(() => LoadProject(project))">@project.ProjectName</li>
+                <li class="list-group-item" @onclick="@(() => SaveProjectBeforeLoad(project))">@project.ProjectName</li>
             }
         }
     </ul>
@@ -29,6 +30,11 @@
     case DialogType.Rename:
         <RenameProjectDialog OldProjectName="@OldProjectName" CloseDialogCallback="@CloseDialog"></RenameProjectDialog>
         break;
+    case DialogType.SaveProject:
+        <SaveProjectDialog
+            SubmitSucceededCallback="OnSaveProjectSucceeded"
+            CloseDialogCallback="@CloseDialog"></SaveProjectDialog>
+        break;
 }
 
 @code {
@@ -37,12 +43,6 @@
     public WorkspaceLayout Layout { get; init; }
 
     DialogType Type { get; set; }
-
-    void LoadProject(AlgorithmEasy.Shared.Models.Project project)
-    {
-        Layout.Display = WorkspaceLayout.DisplayType.Workspace;
-        _projectManager.LoadProject(project);
-    }
 
 #region ProjectManagerDelegate
 #nullable enable
@@ -61,11 +61,28 @@
 
 #region DialogParamters
     string OldProjectName { get; set; }
+    AlgorithmEasy.Shared.Models.Project NextProject { get; set; }
 
+    void SaveProjectBeforeLoad(AlgorithmEasy.Shared.Models.Project project)
+    {
+        if (_projectManager.CurrentProject == null)
+        {
+            Layout.Display |= WorkspaceLayout.DisplayType.Workspace;
+            _projectManager.LoadProject(project);
+            StateHasChanged();
+            return;
+        }
+        NextProject = project;
+        Type = DialogType.SaveProject;
+        StateHasChanged();
+    }
+
+    void OnSaveProjectSucceeded() => _projectManager.LoadProject(NextProject);
     void CloseDialog()
     {
         Type = DialogType.None;
-        InvokeAsync(StateHasChanged);
+        Layout.Display |= WorkspaceLayout.DisplayType.Workspace;
+        StateHasChanged();
     }
     #endregion
 
@@ -102,5 +119,6 @@
     {
         None,
         Rename,
+        SaveProject,
     }
 }

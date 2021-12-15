@@ -1,6 +1,9 @@
 ﻿@using Blazored.Toast
 @using AlgorithmEasy.StudentSide.Shared.Enums
+@using AlgorithmEasy.StudentSide.Shared.Components
+@using AlgorithmEasy.StudentSide.Services
 @inherits LayoutComponentBase
+@inject ProjectManageService _projectManager
 
 <CascadingValue Value="@this">
     <div class="page">
@@ -11,7 +14,7 @@
                     {
                         case Page.Project:
                             <i class="fas fa-book-reader fa-lg"
-                               @onclick="@(() => _navigation.NavigateTo("/course"))"></i>
+                               @onclick="@SaveProject"></i>
                             break;
                         case Page.Course:
                             <i class="fas fa-laptop-code fa-lg"
@@ -41,10 +44,37 @@
 
 <BlazoredToasts/>
 
+@switch (Type)
+{
+    case DialogType.SaveProject:
+        <SaveProjectDialog
+            SubmitSucceededCallback="@(() => _navigation.NavigateTo("/course"))"
+            CloseDialogCallback="@CloseDialog"></SaveProjectDialog>
+        break;
+}
+
 @code
 {
-    Page _page;
+    DialogType Type { get; set; } = DialogType.None;
 
+    void SaveProject()
+    {
+        if (_projectManager.CurrentProject == null)
+        {
+            _navigation.NavigateTo("/course");
+            return;
+        }
+        Type = DialogType.SaveProject;
+        StateHasChanged();
+    }
+
+    void CloseDialog()
+    {
+        Type = DialogType.None;
+        StateHasChanged();
+    }
+
+    Page _page;
     public Page Page
     {
         get => _page;
@@ -53,5 +83,11 @@
             _page = value;
             StateHasChanged();
         }
+    }
+
+    enum DialogType
+    {
+        None,
+        SaveProject,
     }
 }

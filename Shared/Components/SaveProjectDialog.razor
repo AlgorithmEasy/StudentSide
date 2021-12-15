@@ -1,0 +1,49 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using AlgorithmEasy.Shared.Requests
+@using AlgorithmEasy.StudentSide.Services
+@inject ProjectManageService _projectManager
+
+<mask class="vw-100 vh-100 bg-black opacity-50 position-fixed top-0"></mask>
+<save-project-dialog class="vw-100 vh-100 position-fixed top-0 d-flex flex-column align-items-center justify-content-center">
+    <form class="bg-white w-25 p-2 d-flex flex-column">
+
+        <legend class="mb-3 px-3 d-flex justify-content-between">
+            <span>保存</span>
+            <span class="btn btn-close" @onclick="@(async () => await CloseDialogCallback.InvokeAsync())"></span>
+        </legend>
+
+        <dialog-body class="d-flex flex-column justify-content-between">
+            <div class="mb-3 px-3">
+                <div>是否保存当前项目？</div>
+            </div>
+
+            <div class="w-50 d-flex px-3 align-items-center">
+                <div class="btn btn-primary me-2" @onclick="@SubmitForm">是</div>
+                <div type="button" class="btn btn-danger ms-2" @onclick="@CloseDialog">否</div>
+            </div>
+        </dialog-body>
+    </form>
+</save-project-dialog>
+
+@code {
+
+    [Parameter] public EventCallback SubmitSucceededCallback { get; set; }
+    [Required] [Parameter] public EventCallback CloseDialogCallback { get; set; }
+
+    async Task SubmitForm()
+    {
+        {
+            var (level, message) = await _projectManager.SaveProject();
+            _toastService.ShowToast(level, message, "保存项目");
+            if (level != ToastLevel.Success) return;
+        }
+
+        await CloseDialog();
+    }
+
+    async Task CloseDialog()
+    {
+        await SubmitSucceededCallback.InvokeAsync();
+        await CloseDialogCallback.InvokeAsync();
+    }
+}

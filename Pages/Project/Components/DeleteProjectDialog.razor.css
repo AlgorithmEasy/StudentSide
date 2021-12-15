@@ -2,7 +2,7 @@ mask {
     z-index: 200;
 }
 
-rename-project-dialog {
+delete-project-dialog {
     z-index: 350;
 }
 

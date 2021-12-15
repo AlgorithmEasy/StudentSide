@@ -13,7 +13,7 @@
             <span class="btn btn-close" @onclick="@(async () => await CloseDialogCallback.InvokeAsync())"></span>
         </legend>
 
-        <form-body class="d-flex flex-column justify-content-between align-items-center">
+        <dialog-body class="d-flex flex-column justify-content-between">
             <div class="mb-3 px-3">
                 <label class="form-label">新项目名称</label>
                 <InputText class="form-control" placeholder="项目名称" @bind-Value="Form.NewProjectName"/>
@@ -26,7 +26,7 @@
                 <div type="button" class="btn btn-danger ms-2"
                      @onclick="@(async () => await CloseDialogCallback.InvokeAsync())">关 闭</div>
             </div>
-        </form-body>
+        </dialog-body>
     </EditForm>
 </rename-project-dialog>
 

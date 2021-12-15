@@ -4,6 +4,7 @@
 @using AlgorithmEasy.StudentSide.Shared.Enums
 @using AlgorithmEasy.StudentSide.Pages.Project.Components
 @using AlgorithmEasy.StudentSide.Shared.Components
+@using BlazorContextMenu
 @layout WorkspaceLayout
 @inject ProjectManageService _projectManager
 @inject IJSRuntime _jsRuntime
@@ -16,26 +17,43 @@
         {
             @if (project.ProjectName == _projectManager.CurrentProject?.ProjectName)
             {
-                <li class="list-group-item active">@project.ProjectName</li>
+                <ContextMenuTrigger MenuId="ProjectListMenu" Data="@project" WrapperTag="li"
+                                    CssClass="list-group-item active">
+                    @project.ProjectName
+                </ContextMenuTrigger>
             }
             else
             {
-                <li class="list-group-item" @onclick="@(() => SaveProjectBeforeLoad(project))">@project.ProjectName</li>
+                <ContextMenuTrigger MenuId="ProjectListMenu" Data="@project" WrapperTag="li"
+                                    CssClass="list-group-item" @onclick="@(() => SaveProjectBeforeLoad(project))">
+                    @project.ProjectName
+                </ContextMenuTrigger>
             }
         }
     </ul>
 </project-list>
 @switch (Type)
 {
-    case DialogType.Rename:
-        <RenameProjectDialog OldProjectName="@OldProjectName" CloseDialogCallback="@CloseDialog"></RenameProjectDialog>
+    case DialogType.RenameProject:
+        <RenameProjectDialog
+            OldProjectName="@DialogProjectName"
+            CloseDialogCallback="@CloseDialog"></RenameProjectDialog>
         break;
     case DialogType.SaveProject:
         <SaveProjectDialog
-            SubmitSucceededCallback="OnSaveProjectSucceeded"
-            CloseDialogCallback="@CloseDialog"></SaveProjectDialog>
+            SubmitSucceededCallback="@OnSaveProjectSucceeded"
+            CloseDialogCallback="@CloseSaveProjectDialog"></SaveProjectDialog>
+        break;
+    case DialogType.DeleteProject:
+        <DeleteProjectDialog
+            ProjectName="@DialogProjectName"
+            CloseDialogCallback="@CloseDialog"></DeleteProjectDialog>
         break;
 }
+<ContextMenu Id="ProjectListMenu">
+    <Item OnClick="RenameProject">重命名</Item>
+    <Item OnClick="DeleteProject">删除</Item>
+</ContextMenu>
 
 @code {
 
@@ -60,7 +78,7 @@
 #endregion
 
 #region DialogParamters
-    string OldProjectName { get; set; }
+    string DialogProjectName { get; set; }
     AlgorithmEasy.Shared.Models.Project NextProject { get; set; }
 
     void SaveProjectBeforeLoad(AlgorithmEasy.Shared.Models.Project project)
@@ -77,11 +95,31 @@
         StateHasChanged();
     }
 
+    void RenameProject(ItemClickEventArgs args)
+    {
+        var project = args.Data as AlgorithmEasy.Shared.Models.Project;
+        DialogProjectName = project!.ProjectName;
+        Type = DialogType.RenameProject;
+        StateHasChanged();
+    }
+
+    void DeleteProject(ItemClickEventArgs args)
+    {
+        var project = args.Data as AlgorithmEasy.Shared.Models.Project;
+        DialogProjectName = project!.ProjectName;
+        Type = DialogType.DeleteProject;
+        StateHasChanged();
+    }
+
     void OnSaveProjectSucceeded() => _projectManager.LoadProject(NextProject);
+    void CloseSaveProjectDialog()
+    {
+        Layout.Display |= WorkspaceLayout.DisplayType.Workspace;
+        CloseDialog();
+    }
     void CloseDialog()
     {
         Type = DialogType.None;
-        Layout.Display |= WorkspaceLayout.DisplayType.Workspace;
         StateHasChanged();
     }
     #endregion
@@ -118,7 +156,8 @@
     enum DialogType
     {
         None,
-        Rename,
+        RenameProject,
         SaveProject,
+        DeleteProject,
     }
 }

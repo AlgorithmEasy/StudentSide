@@ -28,14 +28,13 @@
                 <top-row class="w-100 d-flex justify-content-end align-items-center px-5">
                     @if (Page == Page.Course)
                     {
-                        @if (Display.HasFlag(DisplayType.Workspace))
+                        @if (Display.HasFlag(DisplayType.CourseViewer))
                         {
-
-                            <i class="fas fa-book-open mx-1 fa-lg" @onclick="@DisplayCourseViewer"></i>
+                            <i class="fas fa-book mx-1 fa-lg" @onclick="@HideCourseViewer"></i>
                         }
                         else
                         {
-                            <i class="fas fa-book mx-1 fa-lg" @onclick="@HideCourseViewer"></i>
+                            <i class="fas fa-book-open mx-1 fa-lg" @onclick="@DisplayCourseViewer"></i>
                         }
                     }
                     @switch (Workspace?.Type)
@@ -98,13 +97,11 @@
     #region CourseViewer
     void DisplayCourseViewer()
     {
-        if (Display == DisplayType.None) return;
         Display |= DisplayType.CourseViewer;
         StateHasChanged();
     }
     void HideCourseViewer()
     {
-        if (Display ==DisplayType.None) return;
         Display &= DisplayType.Workspace;
         StateHasChanged();
     }

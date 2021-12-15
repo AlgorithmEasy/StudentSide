@@ -54,12 +54,6 @@
 #region DialogParamters
     string OldProjectName { get; set; }
 
-    void OpenRenameProjectDialog(string oldProjectName)
-    {
-        OldProjectName = oldProjectName;
-        Type = DialogType.Rename;
-        InvokeAsync(StateHasChanged);
-    }
     void CloseDialog()
     {
         Type = DialogType.None;

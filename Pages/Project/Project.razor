@@ -73,8 +73,11 @@
         {
             var (level, message) = await _projectManager.GetPersonalProjects();
             if (level != ToastLevel.Success)
+            {
                 _toastService.ShowToast(level, message, "加载项目列表");
-            await base.OnInitializedAsync();
+                await base.OnInitializedAsync();
+                return;
+            }
         }
 
         _projectManager.OnProjectsSet += ProjectsChanged;

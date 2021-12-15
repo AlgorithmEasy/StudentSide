@@ -9,6 +9,7 @@ using AlgorithmEasy.Shared.Models;
 using AlgorithmEasy.Shared.Requests;
 using AlgorithmEasy.Shared.Responses;
 using AlgorithmEasy.Shared.Services;
+using AlgorithmEasy.StudentSide.Layouts.WorkspaceLayout.Components;
 using AlgorithmEasy.StudentSide.Shared;
 using Blazored.Toast.Services;
 
@@ -134,11 +135,14 @@ namespace AlgorithmEasy.StudentSide.Services
         {
             if (CurrentProject == null)
                 return new(ToastLevel.Error, "请先打开一个项目");
+            var request = new SaveProjectRequest
+            {
+                ProjectName = CurrentProject.ProjectName,
+                Workspace = CurrentProject.Workspace
+            };
             try
             {
-                using var response = await _client.PutAsync(
-                    $"ProjectManage/SaveProject?projectName={CurrentProject.ProjectName}",
-                    new StringContent(CurrentProject.Workspace));
+                using var response = await _client.PutAsJsonAsync($"ProjectManage/SaveProject", request);
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _authentication.Logout();

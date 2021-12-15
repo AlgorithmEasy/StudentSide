@@ -7,6 +7,7 @@
 @implements IDisposable
 @inject IJSRuntime _jsRuntime
 @inject ProgramExecuteService _programExecutor
+@inject ProjectManageService _projectManager
 
 <CascadingValue Value="@this">
     <workspace-layout-container class="d-flex vw-100 h-100">
@@ -15,7 +16,7 @@
                 <top-row class="w-100 d-flex justify-content-end align-items-center px-3">
                     @if (Page == Page.Project)
                     {
-                        <i class="fas fa-save mx-1 fa-lg"></i>
+                        <i class="fas fa-save mx-1 fa-lg" @onclick="@SaveProject"></i>
                         <i class="fas fa-plus mx-1 fa-lg" @onclick="@OpenCreateProjectDialog"></i>
                     }
                 </top-row>
@@ -135,6 +136,11 @@
         _toastService.ShowToast(level, message, "执行程序");
     }
 
+    async Task SaveProject()
+    {
+        var (level, message) = await _projectManager.SaveProject();
+        _toastService.ShowToast(level, message, "保存项目");
+    }
     #endregion
 
     #region DialogParamters

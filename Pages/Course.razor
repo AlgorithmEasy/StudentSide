@@ -46,9 +46,9 @@
     #region CourseManagerDelegate
 #nullable enable
     void CoursesSet(object? _, IEnumerable<AlgorithmEasy.Shared.Models.Course> courses) =>
-        InvokeAsync(StateHasChanged);
+        StateHasChanged();
     void LearningHistoriesSet(object? _, IEnumerable<AlgorithmEasy.Shared.Models.LearningHistory> learningHistories) =>
-        InvokeAsync(StateHasChanged);
+        StateHasChanged();
 
     async void LoadCourseWorkspace(object? _, AlgorithmEasy.Shared.Models.Course? course)
     {

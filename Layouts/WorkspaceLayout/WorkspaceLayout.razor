@@ -150,13 +150,13 @@
     void OpenCreateProjectDialog()
     {
         Dialog = DialogType.CreateProject;
-        InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
 
     void CloseDialog()
     {
         Dialog = DialogType.None;
-        InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
     #endregion
 
@@ -188,7 +188,7 @@
         set
         {
             Layout.Page = value;
-            InvokeAsync(StateHasChanged);
+            StateHasChanged();
         }
     }
 

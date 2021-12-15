@@ -51,7 +51,7 @@
         set
         {
             _page = value;
-            InvokeAsync(StateHasChanged);
+            StateHasChanged();
         }
     }
 }

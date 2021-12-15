@@ -15,10 +15,10 @@
     HubConnection PythonExecutorHubConnection { get; set; }
 
 #nullable enable
-    async void CLearTerminal(object? sender, EventArgs args)
+    void CLearTerminal(object? sender, EventArgs args)
     {
         Output = string.Empty;
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
 #nullable disable
 

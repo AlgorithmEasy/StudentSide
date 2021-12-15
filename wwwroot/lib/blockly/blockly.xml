@@ -286,6 +286,9 @@
     </block>
     <block type="lists_sort"></block>
     <block type="lists_reverse"></block>
+    <block type="duplicate_removal"></block>
+    <block type="block_filter_number"></block>
+    <block type="filter_substr_list"></block>
   </category>
   <category name="颜色" categorystyle="colour_category">
     <block type="colour_picker"></block>
@@ -326,4 +329,11 @@
     </block>
   </category>
   <category name="函数" categorystyle="procedure_category" custom="PROCEDURE"></category>
+  <category name="扩展" categorystyle="expand_category">
+    <block type="get_factorial"></block>
+    <block type="cal_lcm_or_gcd"></block>
+    <block type="number_conversion"></block>
+    <block type="quick_mod"></block>
+    <block type="inverse_element"></block>
+  </category>
 </xml>

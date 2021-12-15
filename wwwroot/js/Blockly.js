@@ -152,11 +152,8 @@ Blockly.configTheme = function () {
         "procedure_blocks": {
             "colourPrimary": 60
         },
-        "ai_blocks": {
+        "expand_blocks": {
             "colourPrimary": 270
-        },
-        "wobot_blocks": {
-            "colourPrimary": 1
         }
     };
     // 菜单主题
@@ -185,11 +182,8 @@ Blockly.configTheme = function () {
         "procedure_category": {
             "colour": 60
         },
-        "ai_category": {
+        "expand_category": {
             "colour": 270
-        },
-        "wobot_category": {
-            "colour": 1
         }
     };
     // 组件主题

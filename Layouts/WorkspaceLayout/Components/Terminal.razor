@@ -1,4 +1,5 @@
 ﻿@using AlgorithmEasy.StudentSide.Services
+@using Microsoft.AspNetCore.SignalR.Client
 @implements IDisposable
 @inject IJSRuntime _jsRuntime
 @inject ProgramExecuteService _programExecutor
@@ -11,15 +12,12 @@
 
     string Output { get; set; }
 
+    HubConnection PythonExecutorHubConnection { get; set; }
+
 #nullable enable
     async void CLearTerminal(object? sender, EventArgs args)
     {
         Output = string.Empty;
-        await InvokeAsync(StateHasChanged);
-    }
-    async void AppendOutput(object? sender, string message)
-    {
-        Output += message;
         await InvokeAsync(StateHasChanged);
     }
 #nullable disable
@@ -29,17 +27,27 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         _programExecutor.BeforeExecute += CLearTerminal;
-        _programExecutor.OnReceiveOutput += AppendOutput;
-        return base.OnInitializedAsync();
+
+        PythonExecutorHubConnection = new HubConnectionBuilder()
+            .WithUrl(Environment.GetEnvironmentVariable("ALGORITHMEASY_PYTHON_EXECUTION_HUB"))
+            .Build();
+        PythonExecutorHubConnection.On<string>("ReceiveOutput",
+            message =>
+            {
+                Output += message;
+                StateHasChanged();
+            });
+
+        await PythonExecutorHubConnection.StartAsync();
+        await base.OnInitializedAsync();
     }
 
     public void Dispose()
     {
         _programExecutor.BeforeExecute -= CLearTerminal;
-        _programExecutor.OnReceiveOutput -= AppendOutput;
     }
 
 }

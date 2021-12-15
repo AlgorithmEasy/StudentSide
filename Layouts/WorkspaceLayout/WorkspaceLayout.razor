@@ -46,7 +46,7 @@
                             <i class="fas fa-cubes mx-1 fa-lg" @onclick="@DisplayBlockly"></i>
                             break;
                     }
-                    @if (_programExecutor.PythonExecutorHubConnection.State == HubConnectionState.Connected)
+                    @if (_programExecutor.Running)
                     {
                         <i class="fas fa-sync fa-spin fa-pulse mx-1 fa-lg"></i>
                     }

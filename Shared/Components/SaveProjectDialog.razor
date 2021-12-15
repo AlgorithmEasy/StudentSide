@@ -7,7 +7,7 @@
 <save-project-dialog class="vw-100 vh-100 position-fixed top-0 d-flex flex-column align-items-center justify-content-center">
     <form class="bg-white w-25 p-2 d-flex flex-column">
 
-        <legend class="mb-3 px-3 d-flex justify-content-between">
+        <legend class="mb-3 px-3 d-flex justify-content-between align-items-center">
             <span>保存</span>
             <span class="btn btn-close" @onclick="@(async () => await CloseDialogCallback.InvokeAsync())"></span>
         </legend>
@@ -17,7 +17,7 @@
                 <div>是否保存当前项目？</div>
             </div>
 
-            <div class="w-50 d-flex px-3 align-items-center">
+            <div class="w-100 d-flex px-3 justify-content-end align-items-center">
                 <div class="btn btn-primary me-2" @onclick="@SubmitForm">是</div>
                 <div type="button" class="btn btn-danger ms-2" @onclick="@CloseDialog">否</div>
             </div>

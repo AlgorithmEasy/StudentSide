@@ -3,12 +3,13 @@
 @using AlgorithmEasy.StudentSide.Shared.Components
 @using AlgorithmEasy.StudentSide.Services
 @inherits LayoutComponentBase
+@inject AuthenticationService _authentication
 @inject ProjectManageService _projectManager
 
 <CascadingValue Value="@this">
     <div class="page">
         <top-row>
-            <top-row-container class="h-100 px-4 d-flex justify-content-between">
+            <top-row-container class="h-100 px-4 d-flex justify-content-between align-items-center">
                 <left class="d-flex align-items-center">
                     @switch (Page)
                     {
@@ -24,13 +25,10 @@
                 </left>
                 <right class="d-flex align-items-center">
                     <div id="clock" class="mx-2 fa-lg"></div>
-                    @if (Page == Page.Index)
+                    @if (Page != Page.Index)
                     {
-                        <i class="fas fa-power-off mx-2 fa-lg"></i>
-                    }
-                    else
-                    {
-                        <i class="fas fa-cog mx-2 fa-lg"></i>
+                        <i class="fas fa-power-off mx-2 fa-lg"
+                           @onclick="_authentication.Logout"></i>
                     }
                 </right>
             </top-row-container>

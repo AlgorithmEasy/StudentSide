@@ -28,6 +28,7 @@
 
 @code {
 
+    [Required] [Parameter] public EventCallback CreateProjectSucceededCallback { get; set; }
     [Required] [Parameter] public EventCallback CloseDialogCallback { get; set; }
 
     CreateProjectRequest Form { get; set; }
@@ -49,6 +50,7 @@
             }
         }
         _projectManager.LoadProject(Form.ProjectName);
+        await CreateProjectSucceededCallback.InvokeAsync();
         await CloseDialogCallback.InvokeAsync();
     }
 

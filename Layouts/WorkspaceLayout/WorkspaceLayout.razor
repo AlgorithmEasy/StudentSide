@@ -74,7 +74,9 @@
 
 @if (Dialog == DialogType.CreateProject)
 {
-    <CreateProjectDialog CloseDialogCallback="@CloseDialog"></CreateProjectDialog>
+    <CreateProjectDialog
+        CreateProjectSucceededCallback="@(() => Display |= DisplayType.Workspace)"
+        CloseDialogCallback="@CloseDialog"></CreateProjectDialog>
 }
 
 @code

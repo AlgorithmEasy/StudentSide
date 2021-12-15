@@ -22,7 +22,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ALGORITHMEASY_USER_CENTER_URL": "https://localhost:6001",
         "ALGORITHMEASY_PROJECT_CENTER_URL": "https://localhost:7001",
-        "ALGORITHMEASY_COURSE_CENTER_URL": "https://localhost:8001"
+        "ALGORITHMEASY_COURSE_CENTER_URL": "https://localhost:8001",
+        "ALGORITHMEASY_PROGRAM_EXECUTION_CENTER_URL": "https://localhost:9001",
+        "ALGORITHMEASY_PYTHON_EXECUTION_HUB": "https://localhost:9001/PythonExecutor"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "dotnetRunMessages": "true"

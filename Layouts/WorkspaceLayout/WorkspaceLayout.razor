@@ -138,6 +138,8 @@
 
     async Task SaveProject()
     {
+        var workspace = await _jsRuntime.InvokeAsync<string>("Blockly.exportWorkspace");
+        _projectManager.StashProject(workspace);
         var (level, message) = await _projectManager.SaveProject();
         _toastService.ShowToast(level, message, "保存项目");
     }

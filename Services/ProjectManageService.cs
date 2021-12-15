@@ -80,6 +80,7 @@ namespace AlgorithmEasy.StudentSide.Services
         }
 
         #region HttpClient
+
         public async Task<ToastTuple> GetPersonalProjects()
         {
             try
@@ -119,6 +120,7 @@ namespace AlgorithmEasy.StudentSide.Services
                     _authentication.Logout();
                     return new(ToastLevel.Error, ErrorMessages.UnAuthorizedErrorMessage);
                 }
+
                 var message = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return new(ToastLevel.Error, message);
@@ -130,14 +132,14 @@ namespace AlgorithmEasy.StudentSide.Services
             }
         }
 
-        public async Task<ToastTuple> SaveProject()
+        public async Task<ToastTuple> SaveProject(Project project)
         {
-            if (CurrentProject == null)
+            if (project == null)
                 return new(ToastLevel.Error, "请先打开一个项目");
             var request = new SaveProjectRequest
             {
-                ProjectName = CurrentProject.ProjectName,
-                Workspace = CurrentProject.Workspace
+                ProjectName = project.ProjectName,
+                Workspace = project.Workspace
             };
             try
             {
@@ -159,6 +161,18 @@ namespace AlgorithmEasy.StudentSide.Services
                 return new(ToastLevel.Error, ErrorMessages.ConnectErrorMessage);
             }
         }
+        public async Task<ToastTuple> SaveProject(string projectName) =>
+            await SaveProject(Projects.SingleOrDefault(project => project.ProjectName == projectName));
+        public async Task<ToastTuple> SaveProject() => await SaveProject(CurrentProject);
+
+        public void StashProject(Project project, string workspace)
+        {
+            if (project == null) return;
+            project.Workspace = workspace;
+        }
+        public void StashProject(string projectName, string workspace) =>
+            StashProject(Projects.SingleOrDefault(project => project.ProjectName == projectName), workspace);
+        public void StashProject(string workspace) => StashProject(CurrentProject, workspace);
 
         public async Task<ToastTuple> RenameProject(string oldProjectName, string newProjectName)
         {

@@ -1,10 +1,46 @@
-﻿<terminal-container class="w-100 h-100">
+﻿@using AlgorithmEasy.StudentSide.Services
+@implements IDisposable
+@inject IJSRuntime _jsRuntime
+@inject ProgramExecuteService _programExecutor
+
+<terminal-container class="w-100 h-100">
     <pre>@Output</pre>
 </terminal-container>
 
 @code {
 
-    string Output { get; set; } = "Python 3.9.6 (tags/v3.9.6:db3ff76, Jun 28 2021, 15:26:21) [MSC v.1929 64 bit (AMD64)] on win32\n" +
-                                  "Type \"help\", \"copyright\", \"credits\" or \"license\" for more information.\n>>>";
+    string Output { get; set; }
+
+#nullable enable
+    async void CLearTerminal(object? sender, EventArgs args)
+    {
+        Output = string.Empty;
+        await InvokeAsync(StateHasChanged);
+    }
+    async void AppendOutput(object? sender, string message)
+    {
+        Output += message;
+        await InvokeAsync(StateHasChanged);
+    }
+#nullable disable
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await _jsRuntime.InvokeVoidAsync("Terminal.TerminalScrollToBottom");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _programExecutor.BeforeExecute += CLearTerminal;
+        _programExecutor.OnReceiveOutput += AppendOutput;
+        return base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        _programExecutor.BeforeExecute -= CLearTerminal;
+        _programExecutor.OnReceiveOutput -= AppendOutput;
+    }
 
 }

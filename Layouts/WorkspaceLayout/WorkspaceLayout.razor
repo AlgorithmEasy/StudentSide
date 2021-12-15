@@ -1,8 +1,12 @@
 ﻿@using AlgorithmEasy.StudentSide.Layouts.WorkspaceLayout.Components
+@using AlgorithmEasy.StudentSide.Services
 @using AlgorithmEasy.StudentSide.Shared.Enums
+@using Microsoft.AspNetCore.SignalR.Client
 @inherits LayoutComponentBase
 @layout MainLayout
+@implements IDisposable
 @inject IJSRuntime _jsRuntime
+@inject ProgramExecuteService _programExecutor
 
 <CascadingValue Value="@this">
     <workspace-layout-container class="d-flex vw-100 h-100">
@@ -26,27 +30,30 @@
                         @if (Display.HasFlag(DisplayType.Workspace))
                         {
 
-                            <i class="fas fa-book-open mx-1 fa-lg"
-                               @onclick="@DisplayCourseViewer"></i>
+                            <i class="fas fa-book-open mx-1 fa-lg" @onclick="@DisplayCourseViewer"></i>
                         }
                         else
                         {
-                            <i class="fas fa-book mx-1 fa-lg"
-                               @onclick="@HideCourseViewer"></i>
+                            <i class="fas fa-book mx-1 fa-lg" @onclick="@HideCourseViewer"></i>
                         }
                     }
                     @switch (Workspace?.Type)
                     {
                         case Workspace.DisplayMode.Blockly:
-                            <i class="fas fa-code mx-1 fa-lg"
-                               @onclick="@DisplayPython"></i>
+                            <i class="fas fa-code mx-1 fa-lg" @onclick="@DisplayPython"></i>
                             break;
                         case Workspace.DisplayMode.Python:
-                            <i class="fas fa-cubes mx-1 fa-lg"
-                               @onclick="@DisplayBlockly"></i>
+                            <i class="fas fa-cubes mx-1 fa-lg" @onclick="@DisplayBlockly"></i>
                             break;
                     }
-                    <i class="fas fa-play mx-1 fa-lg"></i>
+                    @if (_programExecutor.PythonExecutorHubConnection.State == HubConnectionState.Connected)
+                    {
+                        <i class="fas fa-sync fa-spin fa-pulse mx-1 fa-lg"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-play mx-1 fa-lg" @onclick="ExecuteBlockly"></i>
+                    }
                 </top-row>
                 <display-body class="w-100 h-75 d-flex">
                     <blockly class="w-100 h-100 p-2" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
@@ -56,7 +63,7 @@
                         <CourseViewer></CourseViewer>
                     </div>
                 </display-body>
-                <display-footer class="w-100 h-25 p-2">
+                <display-footer id="terminal" class="w-100 h-25 p-2 overflow-auto">
                     <Terminal></Terminal>
                 </display-footer>
             </display-container>
@@ -115,6 +122,19 @@
         Workspace.DisplayPython();
         StateHasChanged();
     }
+
+#nullable enable
+    void RerenderPlayIcon(object? sender, EventArgs args) => StateHasChanged();
+#nullable disable
+
+    async Task ExecuteBlockly()
+    {
+        var code = await _jsRuntime.InvokeAsync<string>("Blockly.workspaceToPython");
+        _toastService.ShowSuccess("开始执行程序。", "执行程序");
+        var (level, message) = await _programExecutor.ExecutePythonCode(code);
+        _toastService.ShowToast(level, message, "执行程序");
+    }
+
     #endregion
 
     #region DialogParamters
@@ -137,6 +157,19 @@
     {
         await _jsRuntime.InvokeVoidAsync("Blockly.resizeWorkspace");
         await base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _programExecutor.BeforeExecute += RerenderPlayIcon;
+        _programExecutor.AfterExecute += RerenderPlayIcon;
+        return base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        _programExecutor.BeforeExecute -= RerenderPlayIcon;
+        _programExecutor.AfterExecute -= RerenderPlayIcon;
     }
 
     public Page Page

@@ -19,11 +19,11 @@
             </source-list-container>
         </left>
         <right class="h-100 d-flex flex-column">
-            <div class="w-100 h-75 d-flex p-2">
-                <blockly class="w-100 h-100" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
+            <div class="w-100 h-75 d-flex">
+                <blockly class="w-100 h-100 p-2" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
                     <Workspace></Workspace>
                 </blockly>
-                <div class="w-100 h-100 overflow-auto" hidden="@(!Display.HasFlag(DisplayType.CourseViewer))">
+                <div class="w-100 h-100 overflow-auto p-2" hidden="@(!Display.HasFlag(DisplayType.CourseViewer))">
                     <CourseViewer></CourseViewer>
                 </div>
             </div>

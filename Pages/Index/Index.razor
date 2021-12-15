@@ -10,12 +10,12 @@
         <DataAnnotationsValidator/>
 
         <div class="px-2 mb-3">
-            <InputText class="form-control login-form" placeholder="用户名" @bind-Value="LoginForm.UserId"/>
+            <InputText class="form-control login-form bg-white" placeholder="用户名" @bind-Value="LoginForm.UserId"/>
             <ValidationMessage For="() => LoginForm.UserId"/>
         </div>
 
         <div class="px-2 mb-3">
-            <InputText class="form-control login-form" type="password" placeholder="密码" @bind-Value="LoginForm.Password"/>
+            <InputText class="form-control login-form bg-white" type="password" placeholder="密码" @bind-Value="LoginForm.Password"/>
             <ValidationMessage For="() => LoginForm.Password"/>
         </div>
 

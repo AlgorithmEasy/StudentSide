@@ -9,7 +9,6 @@ using AlgorithmEasy.Shared.Models;
 using AlgorithmEasy.Shared.Requests;
 using AlgorithmEasy.Shared.Responses;
 using AlgorithmEasy.Shared.Services;
-using AlgorithmEasy.StudentSide.Layouts.WorkspaceLayout.Components;
 using AlgorithmEasy.StudentSide.Shared;
 using Blazored.Toast.Services;
 

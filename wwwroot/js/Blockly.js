@@ -71,7 +71,6 @@ Blockly.workspaceToPython = function () {
 Blockly.importWorkspace = function (xml) {
     Blockly.workspace.clear();
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), Blockly.workspace);
-    console.log("Workspace loaded.");
 };
 
 /**

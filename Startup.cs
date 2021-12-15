@@ -30,6 +30,7 @@ namespace AlgorithmEasy.StudentSide
             services.AddServerSideBlazor();
 
             services.AddBlazoredToast();
+            services.AddBlazorContextMenu();
 
             services.AddScoped<AuthenticationService, ProductAuthentication>();
             services.AddScoped<AuthenticationStateProvider>(p => p.GetService<AuthenticationService>());

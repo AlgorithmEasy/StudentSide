@@ -2,6 +2,7 @@
 @using AlgorithmEasy.Shared.Requests
 @using AlgorithmEasy.StudentSide.Services
 @inject ProjectManageService _projectManager
+@inject IJSRuntime _jsRuntime
 
 <mask class="vw-100 vh-100 bg-black opacity-50 position-fixed top-0"></mask>
 <save-project-dialog class="vw-100 vh-100 position-fixed top-0 d-flex flex-column align-items-center justify-content-center">
@@ -32,6 +33,8 @@
 
     async Task SubmitForm()
     {
+        var code = await _jsRuntime.InvokeAsync<string>("Blockly.exportWorkspace");
+        _projectManager.StashProject(code);
         {
             var (level, message) = await _projectManager.SaveProject();
             _toastService.ShowToast(level, message, "保存项目");

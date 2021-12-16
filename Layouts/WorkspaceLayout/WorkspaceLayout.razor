@@ -55,10 +55,11 @@
                     }
                 </top-row>
                 <display-body class="w-100 h-75 d-flex">
-                    <blockly class="w-100 h-100 p-2" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
+                    <blockly class="w-100 h-100 px-2" hidden="@(!Display.HasFlag(DisplayType.Workspace))">
                         <Workspace @ref="Workspace"></Workspace>
                     </blockly>
-                    <div class="w-100 h-100 overflow-auto p-2" hidden="@(!Display.HasFlag(DisplayType.CourseViewer))">
+                    <div class="w-100 h-100 overflow-auto px-2 border border-info border-3 rounded-3"
+                         hidden="@(!Display.HasFlag(DisplayType.CourseViewer))">
                         <CourseViewer></CourseViewer>
                     </div>
                 </display-body>

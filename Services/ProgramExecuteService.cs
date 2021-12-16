@@ -19,6 +19,7 @@ namespace AlgorithmEasy.StudentSide.Services
         private readonly AuthenticationService _authentication;
 
         public bool Running { get; private set; }
+        public string ConnectId { get; set; }
 
         public EventHandler BeforeExecute;
         public EventHandler AfterExecute;
@@ -45,6 +46,7 @@ namespace AlgorithmEasy.StudentSide.Services
         {
             var request = new ExecutePythonRequest
             {
+                ConnectId = ConnectId,
                 Code = code
             };
 

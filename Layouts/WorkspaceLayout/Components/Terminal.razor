@@ -40,8 +40,13 @@
                 Output += message;
                 StateHasChanged();
             });
+        PythonExecutorHubConnection.Reconnected += async connectId =>
+        {
+            _programExecutor.ConnectId = connectId;
+        };
 
         await PythonExecutorHubConnection.StartAsync();
+        _programExecutor.ConnectId = PythonExecutorHubConnection.ConnectionId;
         await base.OnInitializedAsync();
     }
 

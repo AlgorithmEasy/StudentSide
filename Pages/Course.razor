@@ -1,4 +1,5 @@
 ﻿@page "/Course"
+@attribute [Authorize(Roles = "Student")]
 @using AlgorithmEasy.StudentSide.Layouts.WorkspaceLayout
 @using AlgorithmEasy.StudentSide.Services
 @using AlgorithmEasy.StudentSide.Shared.Enums

@@ -4,6 +4,8 @@
 @using AlgorithmEasy.StudentSide.Services
 @inherits LayoutComponentBase
 @inject AuthenticationService _authentication
+@inject CourseManageService _courseManager
+@inject IJSRuntime _jsRuntime
 @inject ProjectManageService _projectManager
 
 <CascadingValue Value="@this">
@@ -19,7 +21,7 @@
                             break;
                         case Page.Course:
                             <i class="fas fa-laptop-code fa-lg"
-                               @onclick="@(() => _navigation.NavigateTo("/project"))"></i>
+                               @onclick="@ShiftToProject"></i>
                             break;
                     }
                 </left>
@@ -46,7 +48,7 @@
 {
     case DialogType.SaveProject:
         <SaveProjectDialog
-            SubmitSucceededCallback="@(() => _navigation.NavigateTo("/course"))"
+            SubmitSucceededCallback="@ShiftToCourse"
             CloseDialogCallback="@CloseDialog"></SaveProjectDialog>
         break;
 }
@@ -55,11 +57,25 @@
 {
     DialogType Type { get; set; } = DialogType.None;
 
+    async void ShiftToCourse()
+    {
+        await _jsRuntime.InvokeVoidAsync("Blockly.importWorkspace",
+            _courseManager.CurrentCourse?.CourseDetail?.Workspace ?? "");
+        _navigation.NavigateTo("/course");
+    }
+
+    async void ShiftToProject()
+    {
+        await _jsRuntime.InvokeVoidAsync("Blockly.importWorkspace",
+            _projectManager.CurrentProject?.Workspace ?? "");
+        _navigation.NavigateTo("/project");
+    }
+
     void SaveProject()
     {
         if (_projectManager.CurrentProject == null)
         {
-            _navigation.NavigateTo("/course");
+            ShiftToCourse();
             return;
         }
         Type = DialogType.SaveProject;

@@ -109,6 +109,7 @@ Blockly.resizeWorkspace = (mask) => {
     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
     Blockly.svgResize(Blockly.workspace);
+    /**
     if (mask) {
         const blocklyMask = document.getElementById('blocklyMask');
         blocklyMask.style.left = x + 'px';
@@ -116,6 +117,7 @@ Blockly.resizeWorkspace = (mask) => {
         blocklyMask.style.width = blocklyArea.offsetWidth + 'px';
         blocklyMask.style.height = blocklyArea.offsetHeight + 'px';
     }
+     */
 }
 
 /**

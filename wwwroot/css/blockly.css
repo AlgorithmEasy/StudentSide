@@ -4,7 +4,7 @@
 }
 
 .blocklyToolboxDiv {
-    width: 5em;
+    width: 4em;
     min-width: 90px;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .blocklyTreeLabel {
-    width: 4.5em;
+    width: 4em;
     height: 3em;
     display: flex;
     align-items: center;

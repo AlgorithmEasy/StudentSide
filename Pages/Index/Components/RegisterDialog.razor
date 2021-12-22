@@ -109,7 +109,7 @@
     {
         Form.RoleId = 3;
         var (level, message) = await _userManager.Register(Form);
-        _toastService.ShowToast(level, message);
+        _toastService.ShowToast(level, message, "用户注册");
         if (level == ToastLevel.Success)
             CloseDialog();
     }

@@ -260,7 +260,17 @@ Blockly.start = function (blockDiv) {
                     toolbox: xhttp.responseText,
                     theme: Blockly.Themes.myTheme,
                     media: "./lib/blockly/media/",
-                    renderer: "zelos"
+                    renderer: "zelos",
+                    move: {
+                        wheel: true
+                    },
+                    zoom: {
+                        controls: true,
+                        startScale: 1.0,
+                        maxScale: 3,
+                        minScale: 0.3,
+                        scaleSpeed: 1.2
+                    }
                 });
             Blockly.workspace.addChangeListener(Blockly.workspaceUpdate);
             window.addEventListener('resize', Blockly.resizeWorkspace, false);

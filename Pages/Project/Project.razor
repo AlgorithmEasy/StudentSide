@@ -12,7 +12,7 @@
 @implements IDisposable
 
 <div class="w-100 px-3 fs-3">我的项目</div>
-<project-list class="w-100">
+<project-list class="w-100  overflow-auto">
     <ul class="list-group list-group-flush my-3">
         @foreach (var project in _projectManager.Projects)
         {

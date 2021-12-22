@@ -9,7 +9,7 @@
 @inject IJSRuntime _jsRuntime
 
 <div class="px-3 fs-3">我的课程</div>
-<course-list>
+<course-list class="w-100  overflow-auto">
     <ul class="list-group list-group-flush my-3">
         @foreach (var course in _courseManager.Courses)
         {

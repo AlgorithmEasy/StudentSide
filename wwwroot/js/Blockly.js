@@ -72,6 +72,7 @@ Blockly.importWorkspace = function (xml) {
     Blockly.workspace.clear();
     if (xml)
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), Blockly.workspace);
+    Blockly.workspace.zoomToFit();
 };
 
 /**

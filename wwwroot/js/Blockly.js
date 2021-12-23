@@ -70,9 +70,10 @@ Blockly.workspaceToPython = function () {
  */
 Blockly.importWorkspace = function (xml) {
     Blockly.workspace.clear();
-    if (xml)
+    if (xml) {
         Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), Blockly.workspace);
-    Blockly.workspace.zoomToFit();
+        Blockly.workspace.scrollCenter();
+    }
 };
 
 /**
@@ -110,6 +111,7 @@ Blockly.resizeWorkspace = (mask) => {
     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
     Blockly.svgResize(Blockly.workspace);
+    Blockly.workspace.scrollCenter();
     /**
     if (mask) {
         const blocklyMask = document.getElementById('blocklyMask');

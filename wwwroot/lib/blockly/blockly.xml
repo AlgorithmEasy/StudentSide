@@ -39,7 +39,7 @@
     <block type="controls_forEach"></block>
     <block type="controls_flow_statements"></block>
   </category>
-  <category name="运算" categorystyle="math_category">
+  <category name="数学" categorystyle="math_category">
     <block type="math_number" gap="32">
       <field name="NUM">123</field>
     </block>
